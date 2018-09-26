@@ -13,9 +13,9 @@
 using namespace std;
 
 #if 0
-void input(double principle, double &rate, int &compound, double &goal)
+void input(double &principle, double &rate, int &compound, double &goal)
 {
-    double calculation (double principle, double rate, int compound, double goal, double amount)
+    //double calculation (double principle, double rate, int compound, double goal, double amount)
     double exponent = compound * time;
     cout<<"Exponent: "<<exponent<<endl;
     double base = 1 + (rate/compound);
@@ -55,24 +55,11 @@ output(double principle, double rate, int compound, double goal)
     return 0;
 }
 #endif
-
-int main(int args, char *argv[]){
-
-  double money=0.0;
-  double interest=0.0;
-  double inter=0.0;
-  int year=0;
-  int num;
-  double goal;
-  double result;
-  double nt;
-
-  int C=0;
-  double y;
-  
+void inputs( double  &money, double &interest, double &year, double &goal, double &num) 
+{
   cout<<"Enter an amount to invest"<<endl;
   cin>>money;
-  
+
   cout<<"Enter an annual interest rate"<<endl;
   cin>>interest;
   
@@ -84,6 +71,23 @@ int main(int args, char *argv[]){
 
   cout<<"Enter compound factor"<<endl;
   cin>>num;
+}
+
+int main(int args, char *argv[]){
+
+  double money=0.0;
+  double interest=0.0;
+  double inter=0.0;
+  double year;
+  double num;
+  double goal;
+  double result;
+  double nt;
+
+  int C=0;
+  double y;
+  inputs(money, interest, year, goal, num) ;
+
 
   inter = interest;
   do {
