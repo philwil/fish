@@ -32,9 +32,14 @@ output (double principle, double rate, int compound, double goal, double amount)
 
 
 }
+// A = P(1+r/n)^(n*t)
+
+//n = num times per year
+//t = num years
+
 
 // Compound Interest Formula: A = ( P(1 + (R/N) ) ^ (N*T) )
-
+// pow ((P + P*(r/n)), (N*T)) 
 int main ()
 {
     double calculation;
@@ -51,10 +56,16 @@ output(double principle, double rate, int compound, double goal)
 }
 #endif
 
-int main(int args, char arg[]){
+int main(int args, char *argv[]){
+
   double money=0.0;
   double interest=0.0;
   int year=0;
+  int num;
+  double goal;
+  double result;
+  double nt;
+
   int C=0;
   double y;
   
@@ -66,11 +77,24 @@ int main(int args, char arg[]){
   
   cout<<"Enter how many years you want calculated"<<endl;
   cin>>year;
+
+  cout<<"Enter goal"<<endl;
+  cin>>goal;
+
+  cout<<"Enter compound factor"<<endl;
+  cin>>num;
+
+  nt = year * num;
+  result =  pow((money+ money *((interest/100)/num)),(nt));
+  result = pow(3,2);
+  cout<<"final result "<< result << "  " <<endl;
+  //  cin>>goal;
+
   do{
-    money+=(money*(interest/100));
+    money+=(money*(interest/(100 * num)));
     C++;
     
-  }while (C<year);
+  }while (C<(year*num));
 
   // do{
   //y=money+(money*interest/100);
@@ -78,8 +102,8 @@ int main(int args, char arg[]){
     
   // }while (C<=year);
   
-  cout<<y;
+  cout<<" final cash " <<money<< std::endl;
   
 
-  system("pause");
+  //std::system("pause");
 }
