@@ -55,6 +55,9 @@ output(double principle, double rate, int compound, double goal)
     return 0;
 }
 #endif
+
+// inputs function
+
 void inputs( double  &money, double &interest, double &year, double &goal, double &num) 
 {
   cout<<"Enter an amount to invest"<<endl;
@@ -73,19 +76,28 @@ void inputs( double  &money, double &interest, double &year, double &goal, doubl
   cin>>num;
 }
 
+double acalc( double ans , double ival)
+{
+    ans = ans + (ans*ival);
+    return ans;
+}
+
 int main(int args, char *argv[]){
 
   double money=0.0;
   double interest=0.0;
-  double inter=0.0;
   double year;
   double num;
   double goal;
   double result;
   double nt;
+  double inter=0.0;
+  double interv;
+  vector <double> ansv;
 
-  int C=0;
+  int z=0;
   double y;
+
   inputs(money, interest, year, goal, num) ;
 
 
@@ -95,6 +107,8 @@ int main(int args, char *argv[]){
     result =  money * pow((1 + (inter/(100 *num))),(nt));
     inter += 0.1;
   } while (result < goal);
+  interv = inter;
+
 
   inter = interest;
   y = year;
@@ -106,23 +120,47 @@ int main(int args, char *argv[]){
 
   //result = pow(3,2);
   cout<<"final result "<< result << "  " <<endl;
-  cout<<"final interest "<< inter << "  " <<endl;
+  cout<<"final interest "<< interv << "  " <<endl;
   cout<<"final years "<< y << "  " <<endl;
-  //  cin>>goal;
+  //  cin>>goal;	
+  double intx = interest/(100 * num);
+  double ans = money;
+  cout << " P " << money << endl;
+  cout << " r " << interest << endl;
+  cout << " n " << num << endl;
+  cout << " Goal " << goal << endl;
 
   do{
-    money+=(money*(interest/(100 * num)));
-    C++;
-    
-  }while (C<(year*num));
+//    money = money + (money*(interest/(100 * num)));
+    ans  = acalc(ans, intx); 
+    //cout <<" value "<< ans << endl;
+    if ((z % 12) == 0)
+	{
+         ansv.push_back(ans);
+          cout <<" value "<< ans << " years " << z/num << "  " <<endl;
 
+       }
+    z++;
+    
+  }while (z<=(year*num) & (ans < goal));
+
+if( ans> goal)
+{
+  cout << " Congrats you met goal and have " << ans-goal << " oer" << endl;
+}
+else
+{
+  cout << " Sad you failed " << endl;
+
+}
+  //cout <<" value "<< ans << " years " << z/num << "  " <<endl;
   // do{
   //y=money+(money*interest/100);
   //C++;
     
   // }while (C<=year);
   
-  cout<<" final cash " <<money<< std::endl;
+  cout<<" final cash " <<ans<< std::endl;
   
 
   //std::system("pause");
