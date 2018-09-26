@@ -60,6 +60,7 @@ int main(int args, char *argv[]){
 
   double money=0.0;
   double interest=0.0;
+  double inter=0.0;
   int year=0;
   int num;
   double goal;
@@ -84,10 +85,25 @@ int main(int args, char *argv[]){
   cout<<"Enter compound factor"<<endl;
   cin>>num;
 
-  nt = year * num;
-  result =  pow((money+ money *((interest/100)/num)),(nt));
-  result = pow(3,2);
+  inter = interest;
+  do {
+    nt = year * num;
+    result =  money * pow((1 + (inter/(100 *num))),(nt));
+    inter += 0.1;
+  } while (result < goal);
+
+  inter = interest;
+  y = year;
+  do {
+    nt = y * num;
+    result =  money * pow((1 + (inter/(100 *num))),(nt));
+    y += 0.1;
+  } while (result < goal);
+
+  //result = pow(3,2);
   cout<<"final result "<< result << "  " <<endl;
+  cout<<"final interest "<< inter << "  " <<endl;
+  cout<<"final years "<< y << "  " <<endl;
   //  cin>>goal;
 
   do{
