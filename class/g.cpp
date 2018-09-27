@@ -1,9 +1,4 @@
 
-// Rohan Sachdev
-// MoneyGrowth Code
-// 9-24-2018
-// Advanced CS - Potter 2018
-// Program 2
 
 #include <iostream>
 #include <iomanip>
