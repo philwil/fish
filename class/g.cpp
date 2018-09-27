@@ -58,7 +58,7 @@ output(double principle, double rate, int compound, double goal)
 
 // inputs function
 
-void inputs( double  &money, double &interest, double &year, double &goal, double &num) 
+void inputs( double  &money, double &interest, double &goal, double &num) 
 {
   cout<<"Enter an amount to invest"<<endl;
   cin>>money;
@@ -66,8 +66,8 @@ void inputs( double  &money, double &interest, double &year, double &goal, doubl
   cout<<"Enter an annual interest rate"<<endl;
   cin>>interest;
   
-  cout<<"Enter how many years you want calculated"<<endl;
-  cin>>year;
+  //cout<<"Enter how many years you want calculated"<<endl;
+  //cin>>year;
 
   cout<<"Enter goal"<<endl;
   cin>>goal;
@@ -86,7 +86,7 @@ int main(int args, char *argv[]){
 
   double money=0.0;
   double interest=0.0;
-  double year;
+  int  year=10;
   double num;
   double goal;
   double result;
@@ -98,7 +98,7 @@ int main(int args, char *argv[]){
   int z=0;
   double y;
 
-  inputs(money, interest, year, goal, num) ;
+  inputs(money, interest, goal, num) ;
 
 
   inter = interest;
@@ -129,24 +129,27 @@ int main(int args, char *argv[]){
   cout << " r " << interest << endl;
   cout << " n " << num << endl;
   cout << " Goal " << goal << endl;
-
+  z = 0;
+  int done = 0;
   do{
 //    money = money + (money*(interest/(100 * num)));
-    ans  = acalc(ans, intx); 
     //cout <<" value "<< ans << endl;
     if ((z % 12) == 0)
 	{
-         ansv.push_back(ans);
+	  ansv.push_back(ans);
           cout <<" value "<< ans << " years " << z/num << "  " <<endl;
-
+          if ( ans > goal) done = 1;
        }
+    ans  = acalc(ans, intx); 
+
     z++;
     
-  }while (z<=(year*num) & (ans < goal));
+//  }while (z/12<=(year) && (ans < goal));
+  }while (!done);
 
 if( ans> goal)
 {
-  cout << " Congrats you met goal and have " << ans-goal << " oer" << endl;
+  cout << " Congrats you met goal and have " << ans-goal << " over" << endl;
 }
 else
 {
