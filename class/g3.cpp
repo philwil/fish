@@ -43,7 +43,7 @@ double acalc(double ans, double ival)
     return ans;
 }
 
-void output(double ans, double goal, double money, double interest,int num, vector <double> *ansv)
+void output(double ans, double goal, double money, double interest,int num, vector <double> &ansv)
 
 {
   cout << " P " << money << endl;
@@ -54,12 +54,12 @@ void output(double ans, double goal, double money, double interest,int num, vect
   int z = 0;
 
   //  for (ansi = ansv->begin(); ansi < ansv->end(); ++ansi)
-  for (int i = 0; i<ansv->size(); i++)
+  for (int i = 0; i<ansv.size(); i++)
     {
       cout<<"  year  "
 	//<< setw(2) 
 	  << z <<
-	" value " << setprecision(5) <<ansv->at(i)<< std::endl;
+	" value " << setprecision(5) <<ansv.at(i)<< std::endl;
       z++;
     }
 
@@ -108,7 +108,7 @@ int main(int args, char *argv[]){
     ansv.push_back(ans);
   } while (ans < goal);
   
-  output(ans, goal, money, interest, num, &ansv);
+  output(ans, goal, money, interest, num, ansv);
   return 0;
 
 }
