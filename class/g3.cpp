@@ -37,10 +37,27 @@ void inputs(double  &money, double &interest, double &goal, int &num)
   cin>>num;
 }
 
-double acalc(double ans, double ival)
+void acalc(double &ans, double ival)
 {
     ans = ans + (ans*ival);
-    return ans;
+    return;
+}
+
+double acalc(double &ans, double &interest, double &time, int n, double &goal, vector <double> &ansv)
+{
+  int t = 0;
+  do {
+    if((t % n) == 0)
+      {
+	ansv.push_back(ans);
+      }
+    ans = ans + ans * interest/(100 * n); 
+    t++;
+    
+  } while (ans < goal);
+  
+  time = t/n;
+  return ans;
 }
 
 void output(double ans, double goal, double money, double interest,int num, vector <double> &ansv)
@@ -93,20 +110,13 @@ int main(int args, char *argv[]){
 
   int z=0;
   double y;
-
+  double time;
   inputs(money, interest, goal, num) ;
-  //  cin>>goal;	
-  double intx = interest/(100 * num);
   double ans = money;
-  z = 0;
-  do {
-    do {
-      ans  = acalc(ans, intx); 
-      z++;
-    } while ((z % 12) != 0);
-    
-    ansv.push_back(ans);
-  } while (ans < goal);
+  acalc(ans,  interest, time, num, goal, ansv);
+  //  cin>>goal;	
+  //  double intx = interest/(100 * num);
+
   
   output(ans, goal, money, interest, num, ansv);
   return 0;
