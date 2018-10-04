@@ -79,6 +79,15 @@ void avowsort(int &idx, struct aName an [])
 {
 }
 
+void show_names(struct aName an [], int num)
+{
+  int i;
+  for (i = 0; i< num; i++)
+    {
+      cout << " idx " << i<< " name ["<< an[i].name <<"]" << endl;
+    }
+}
+
 int main()
 {
   struct aName an[32];
@@ -97,7 +106,15 @@ int main()
   //  names_len[i] = names[i];
   //  names_vow[i] = names[i];
   //}
+
+  cout << " before len sort" << endl;
+  show_names(an, idx);
+
   alensort(idx,an);
+  cout << " after len sort" << endl;
+
+  show_names(an, idx);
+
   avowsort(idx,an);
   
   return 0;
