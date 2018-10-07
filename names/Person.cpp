@@ -158,8 +158,8 @@ int main()
   OutputDisplay(p, idx);
 
 
-  SortLength(idx,p);
-  cout << " after len sort" << endl;
+  //  SortLength(idx,p);
+  //cout << " after len sort" << endl;
 
   OutputDisplay(p, idx);
   SortVowels(idx,p);
