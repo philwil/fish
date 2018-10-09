@@ -40,7 +40,7 @@ int NumberOfVowels(string &name)
   return v;
 }
 
-void Input(int &max, Persons p [])
+void Input(int &max, Persons p [5])
 {
   string name;
   cout << vowels<< " size " << vowels.size() << endl;
@@ -62,7 +62,7 @@ void Input(int &max, Persons p [])
     } while (idx < max);
   
 }
-void InputTest(int &max, Persons p [])
+void InputTest(int &max, Persons p [5])
 {
   string name;
   cout << vowels<< " size " << vowels.size() << endl;
@@ -84,7 +84,7 @@ void InputTest(int &max, Persons p [])
   
 }
 
-void Swap(Persons*p)
+void Swap(Persons p [])
 {
   Persons ptmp;
   ptmp = p[0];
@@ -93,14 +93,14 @@ void Swap(Persons*p)
 
 }
 
-void SortLength(int len, Persons *p )
+void SortLength(int max, Persons p [5])
 {
   int swapCount = 0;
   Persons *px;
   do {
     px = p;
     swapCount = 0;
-    for (int i = 0; i < len-1; i++)
+    for (int i = 0; i < max-1; i++)
       {
 	if (px->nameLen < (px+1)->nameLen)
 	  {
@@ -113,14 +113,14 @@ void SortLength(int len, Persons *p )
   } while (swapCount > 0);
 }
 
-void SortVowels(int len, Persons *p)
+void SortVowels(int &max, Persons p [5])
 {
   int swapCount = 0;
   Persons *px;
   do {
     px=p;
     swapCount = 0;
-    for (int i = 0; i < len-1; i++)
+    for (int i = 0; i < max-1; i++)
       {
 	//cout << "SortVowels i "<< i<< " p->name ["<< p->name;
 	//cout     << "]" << " p1->name [" << (p+1)->name << "] " << endl;  
@@ -138,10 +138,10 @@ void SortVowels(int len, Persons *p)
 }
 
 
-void OutputDisplay(Persons *p, int num)
+void OutputDisplay(int &max, Persons p [])
 {
   int i;
-  for (i = 0; i< num; i++)
+  for (i = 0; i< max; i++)
     {
       cout << " idx " << i
 	   << " name ["<< p->name <<"]" 
@@ -156,14 +156,14 @@ int main()
 {
   Persons p[5];
 
-  int idx = 5;
+  int max = 5;
 
   //Input(idx, p);
-  InputTest(idx, p);
+  InputTest(max, p);
   
   cout
     //<< " names size " <<  32 
-    << " names entered " <<  idx << endl;
+    << " names entered " <<  max << endl;
   //  for (int i = 0; i<idx; i++)
   // {
   //  names_len[i] = names[i];
@@ -171,22 +171,22 @@ int main()
   //}
 
   cout << " before len sort" << endl;
-  OutputDisplay(p, 5);
+  OutputDisplay(max,p);
   //cout << " after swap" << endl;
   //Swap(p);
-  //OutputDisplay(p, 5);
+  //OutputDisplay(max,p);
 
   //return 0;
 
 
-  //SortLength(5,p);
+  //SortLength(max,p);
   //cout << " after len sort" << endl;
-  //OutputDisplay(p, 5);
+  //OutputDisplay(max,p);
 
-  SortVowels(5,p);
+  SortVowels(max,p);
   cout << " after vowel sort" << endl; 
 
-  OutputDisplay(p, 5);
+  OutputDisplay(max,p);
 
   //avowsort(idx,p);
   
