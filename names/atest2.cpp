@@ -4,18 +4,15 @@ using namespace std;
 
 string vowels="aeiou";
 
-struct aName
+struct Person
 {
-  //aName(){};
-
-  //~aName(){};
   string name;
   int nvs;
   int len;
 };
 
 
-int getvowels(string &name)
+int NumberOfVowels(string &name)
 {
   int i1;
   int i2;
@@ -24,13 +21,16 @@ int getvowels(string &name)
     {
       for (i2 = 0; i2 < vowels.size(); i2++)
 	{
-	  if(name[i1] == vowels[i2]) v++;
+	  if(name[i1] == vowels[i2]) {
+	    v++;
+	    i2 = vowels.size();
+	  }
 	}
     }
   return v;
 }
 
-void getName(int &idx, int &done, struct aName an [])
+void Input(int &idx, int &done, struct aName an [])
 {
   string name;
   cout << vowels<< " size " << vowels.size() << endl;
@@ -45,7 +45,7 @@ void getName(int &idx, int &done, struct aName an [])
 	   << endl;
       an[idx].name = name;
       an[idx].len = name.size();
-      an[idx].nvs = getvowels(name);
+      an[idx].nvs = NumberofVowels(name);
       idx++;
     }
   else
@@ -55,48 +55,54 @@ void getName(int &idx, int &done, struct aName an [])
   
 }
 
-void alensort(int &idx, struct aName an [] )
+void Swap(int &idx, struct Person p [] )
 {
-  int swap = 0;
+  Person ptmp;
+  ptmp = p[idx];
+  p[idx] = p[idx+1];
+  p[i+1] = ptmp;
+}
+
+void SortLength(int &idx, struct Person p [] )
+{
+  int swapCount = 0;
   aName at;
   do {
-    swap = 0;
+    swapCount = 0;
     for (int i = 0; i < idx-1; i++)
       {
-	if (an[i].len > an[i+1].len)
+	if (p[i].len > p[i+1].len)
 	  {
-	    at = an[i];
-	    an[i] = an[i+1];
-	    an[i+1] = at;
-	    swap++;
+            Swap(i,p);
+	    swapCount++;
 	  }
       }
     
-  } while (swap > 0);
+  } while (swapCount > 0);
 }
 
-void avowsort(int &idx, struct aName an [])
+void SortVowels(int &idx, struct Person p [])
 {
 }
 
-void show_names(struct aName an [], int num)
+void OutputDisplay(struct Person p [], int num)
 {
   int i;
   for (i = 0; i< num; i++)
     {
-      cout << " idx " << i<< " name ["<< an[i].name <<"]" << endl;
+      cout << " idx " << i<< " name ["<< p[i].name <<"]" << endl;
     }
 }
 
 int main()
 {
-  struct aName an[32];
+  struct Person p[32];
 
   int idx = 0;
   int done = 0;
   while (!done)
     {
-      getName(idx, done, an);
+      Input(idx, done, p);
     }
   cout
     << " names size " <<  32 
@@ -108,7 +114,7 @@ int main()
   //}
 
   cout << " before len sort" << endl;
-  show_names(an, idx);
+  OutputDisplay(p, idx);
 
   alensort(idx,an);
   cout << " after len sort" << endl;
