@@ -1,4 +1,5 @@
 #include <iostream>
+#include <iomanip>
 #include <array>
 
 //g++  -g -std=c++11 -o g Persons.cpp
@@ -7,11 +8,11 @@ using namespace std;
 string vowels="aeiou";
 
 string testNames [5] = {
-  " anam12222",
-  " nam2",
-  " ffffaaname4",
-  " ssssnameea3",
-  " tttname2222"
+  "anam12222",
+  "nam2",
+  "ffffaaname4",
+  "ssssnameea3",
+  "tttname2222"
 };
 
 struct Persons
@@ -27,6 +28,7 @@ int NumberOfVowels(string &name)
   int i1;
   int i2;
   int v=0;
+
   for (i1 = 0 ; i1 < name.size(); i1++)
     {
       for (i2 = 0; i2 < vowels.size(); i2++)
@@ -40,7 +42,7 @@ int NumberOfVowels(string &name)
   return v;
 }
 
-void Input(int &max, Persons p [5])
+void Input(int &max, Persons p [])
 {
   string name;
   cout << vowels<< " size " << vowels.size() << endl;
@@ -54,101 +56,105 @@ void Input(int &max, Persons p [5])
       cout << "name "
 	   << name<< " size " << name.size()
 	   << endl;
-      p->name = name;
-      p->nameLen = name.size();
-      p->numvowels = NumberOfVowels(name);
-      p++;
+      p[idx].name = name;
+      p[idx].nameLen = name.size();
+      p[idx].numvowels = NumberOfVowels(name);
+      //p++;
       idx++;
     } while (idx < max);
-  
+cout << " End of input" << endl<<endl;
+
 }
-void InputTest(int &max, Persons p [5])
+
+void InputTest(int &max, Persons p [] )
 {
   string name;
-  cout << vowels<< " size " << vowels.size() << endl;
+  //cout << vowels<< " size " << vowels.size() << endl;
   int idx = 0;
    do
     {
       cout << "enter name " <<endl;
+      //cin >> name;
       name = testNames[idx];
-      cout	   << name<< " size " << name.size() << endl;
+      //cout	   << name<< " size " << name.size() << endl;
       cout << "name "
-	   << name<< " size " << name.size()
+	   << name << " size " << name.size()
 	   << endl;
-      p->name = name;
-      p->nameLen = name.size();
-      p->numvowels = NumberOfVowels(name);
+      p[idx].name = name;
+      p[idx].nameLen = name.size();
+      p[idx].numvowels = NumberOfVowels(name);
       idx++;
-      p++;
+      //p++;
     } while (idx < max);
-  
+cout << " End of input" << endl<<endl;
+
 }
 
-void Swap(Persons p [])
+void Swap(int idx, Persons p [])
 {
   Persons ptmp;
-  ptmp = p[0];
-  p[0] = p[1];
-  p[1] = ptmp;
+  ptmp = p[idx];
+  p[idx] = p[idx+1];
+  p[idx+1] = ptmp;
 
 }
 
-void SortLength(int max, Persons p [5])
+void SortLength(int &max, Persons p [] )
 {
-  int swapCount = 0;
-  Persons *px;
+  int swapCount;
   do {
-    px = p;
     swapCount = 0;
     for (int i = 0; i < max-1; i++)
       {
-	if (px->nameLen < (px+1)->nameLen)
+	if (p[i].nameLen < p[i+1].nameLen)
 	  {
-            Swap(px);
+            Swap(i, p);
 	    swapCount++;
 	  }
-	px++;
       }
     
   } while (swapCount > 0);
 }
 
-void SortVowels(int &max, Persons p [5])
+void SortVowels(int &max, Persons p [])
 {
-  int swapCount = 0;
-  Persons *px;
+  int swapCount;
   do {
-    px=p;
     swapCount = 0;
     for (int i = 0; i < max-1; i++)
       {
 	//cout << "SortVowels i "<< i<< " p->name ["<< p->name;
 	//cout     << "]" << " p1->name [" << (p+1)->name << "] " << endl;  
-	if ((px->numvowels < (px+1)->numvowels) ||
-	    (( px->numvowels == (px+1)->numvowels) && (px->nameLen < (px+1)->nameLen)))
+	if (
+             (p[i].numvowels < p[i+1].numvowels) ||
+	    (( p[i].numvowels == p[i+1].numvowels) 
+                  && (p[i].nameLen < p[i+1].nameLen)))
 	  {
-            Swap(px);
+            Swap(i, p);
 	    swapCount++;
 	  }
-	px++;
       }
     
   } while (swapCount > 0);
 
 }
 
-
 void OutputDisplay(int &max, Persons p [])
 {
   int i;
+  cout <<setw(10)<< " name " << " length " <<" vowels " << endl;
+
   for (i = 0; i< max; i++)
     {
-      cout << " idx " << i
-	   << " name ["<< p->name <<"]" 
-	   << " len " << p->nameLen
-	   << " vowels " << p->numvowels
+      cout << setw(10)
+            //<< " idx " << i
+	   //<< " name ["
+           << p[i].name <<" " 
+	   //<< " len " 
+           << p[i].nameLen
+	   << "  " << p[i].numvowels
 	   << endl;
-      p++;
+      //p++;
     }
 }
 
@@ -158,8 +164,14 @@ int main()
 
   int max = 5;
 
-  //Input(idx, p);
-  InputTest(max, p);
+  Input(max, p);
+  //OutputDisplay(max, p);
+  //InputTest(max, p);
+  SortLength(max,p);
+  OutputDisplay(max, p);
+  SortVowels(max,p);
+  OutputDisplay(max, p);
+  return 0;
   
   cout
     //<< " names size " <<  32 
@@ -175,15 +187,15 @@ int main()
   //cout << " after swap" << endl;
   //Swap(p);
   //OutputDisplay(max,p);
+  //SortLength(max,p);
 
   //return 0;
 
 
-  //SortLength(max,p);
   //cout << " after len sort" << endl;
   //OutputDisplay(max,p);
 
-  SortVowels(max,p);
+  //SortVowels(max,p);
   cout << " after vowel sort" << endl; 
 
   OutputDisplay(max,p);
