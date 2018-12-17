@@ -1,4 +1,4 @@
-/ ACSL Contest #1
+// ACSL Contest #1
 // Intermediate Division - Digit Assembly
 // Enloe High School
 // Advanced CS - Mr. Potter
