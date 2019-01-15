@@ -38,8 +38,14 @@
 // It is better to display board and then display piece
 
 #include <iostream>
+#ifdef USE_WINDOWS
 #include <windows.h>
+#else
+#include <stdio.h>
+
+#endif
 #include <stdlib.h>
+
 #include <string>
 #include <ctime> // TO have a different sequence of random numbers each time
 
@@ -85,7 +91,7 @@ void gotoxy(int x, int y)
     coord.Y = y;
     SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), coord);
 #else
-    printf("%c[%d;%dH",0x1b,x,y);
+    printf("%c[%d;%dH",0x1b,y,x);
 #endif
     
 }
@@ -360,9 +366,22 @@ int Board::roll(int &dice1, int &dice2)
     return 0;
 }
 
+// gotoxy
+void gotopiece(int xp, int yp)
+{
+  gotoxy(3 + (xp * 6), 3 + (yp * 3));
+  return;
+}
+
 void Board::boarddisplay(int dice1, int dice2, int p)
 {
+#ifdef USE_WINDOWS
     system("CLS");
+#else
+    system("clear");
+#endif
+  
+    
     gotoxy(1, 1);
     cout << "__________________________________________________________________" << endl;
     cout << "|     |     |     |     |     |     |     |     |     |     |     |" << endl;
@@ -379,8 +398,18 @@ void Board::boarddisplay(int dice1, int dice2, int p)
     int ypos = 5;
     gotoxy (2 + (xpos * 6), 3 + (ypos * 3));
     cout<<"GOAL";
-    gotoxy (1, 39);
+    //gotopiece (0, 0);
+    //cout<<"00";
 
+    //gotopiece (1, 1);
+    //cout<<"11";
+
+    //gotopiece (2,2);
+    //cout<<"22";
+
+    ///exit(0);
+    
+    gotoxy(1, 50);
     cout<<"Move: "<<"Dice 1: "<<dice1<<" Dice 2: "<<dice2<<" Piece Moving: "<<players[p].getpname()<<" Color: "<<players[p].getc()<<" Sum: "<<(dice1 + dice2)<<" Same?: "<<(dice1 == dice2);
 
     for(int i = 0; i < (maxPlayers); i++)
@@ -388,13 +417,15 @@ void Board::boarddisplay(int dice1, int dice2, int p)
         xpos = players[i].getx();
         ypos = players[i].gety();
         // gotoxy(players[i].getx(), players[i].gety());
-        gotoxy (3 + (xpos * 6), 3 + (ypos * 3));
+	gotopiece (xpos, ypos);
+        //gotoxy (3 + (xpos * 6), 3 + (ypos * 3));
         cout<<players[i].getpname();
         gotoxy (1, 40 + i);
         cout<<"After --> Piece  "<< players[i].getpname()<<" X position: "<<xpos<<"   Y position: "<<" "<<ypos; //<<" Home: "<<players[i].gethome(
         xpos = players[i + 4].getx();
         ypos = players[i + 4].gety();
-        gotoxy (3 + (xpos * 6), 3 + (ypos * 3));
+	gotopiece (xpos, ypos);
+        //gotoxy (3 + (xpos * 6), 3 + (ypos * 3));
         cout<<players[i + 4].getpname();
         gotoxy (1, 40 + i + 4);
         cout<<"After --> Piece  "<< players[i + 4].getpname()<<" X position: "<<xpos<<"   Y position: "<<" "<<ypos; //<<" Home: "<<players[i].gethome();
@@ -406,7 +437,8 @@ void Board::boarddisplay(int dice1, int dice2, int p)
         if (xpos != -1)
         {
             // gotoxy(players[i].getx(), players[i].gety());
-            gotoxy (3 + (xpos * 6), 3 + (ypos * 3));
+            //gotoxy (3 + (xpos * 6), 3 + (ypos * 3));
+	    gotopiece (xpos, ypos);
             cout<<chances[i].getpname();
         }
         // gotoxy (1, 40  +i);
@@ -818,6 +850,12 @@ void Board::execute()
 
 int main ()
 {
+  #ifdef USE_WINDOWS
+    system("CLS");
+#else
+    system("clear");
+#endif
+
     // Note: (in general) Moving one block is not moving one pixel
     // This is the int main() that will be used in the final version of this program:
     {
