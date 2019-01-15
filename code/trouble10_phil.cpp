@@ -775,6 +775,8 @@ void Board::execute()
                 }
         */
 // Moving multiple pieces (piece 1 or piece 2) Line
+	gotoxy(1, 47);
+	cout<<" Piece Moving: "<<players[pnIndex].getpname();
         gotoxy(0, 48);
         cout<<" Would you like to move piece #1 or piece #2?";
         cin>>pieceSelect;
