@@ -499,38 +499,42 @@ int Board::doChance(int pn)
 
 int Board::doLand(int pn)
 {
-    // int temp;
-    for (int i=0; i<maxPlayers * 2; i++)
+    // int temp; 
+    for (int j=0; j<maxPlayers; j++)
     {
-        if (pn != i) // Note: This will also move our own to home
+      for (int i=j; i<(maxPlayers+4); i+=4)
+      {
+	  
+	if (pn != i) // Note: This will also move our own to home
             // if (pn != i || pn != (i+4) || pn != (i-4)) this will not move your own piece back home of you land on it
-        {
-            // did we land on someone
-            if ((players[pn].getx() == players[i].getx()) && (players[pn].gety() == players[i].gety()))
-            {
-                gotoxy(10, 55);
-                // cout<<"You land on another player's piece."<<" i = "<<i<<" pn "<<pn<<" ix "
-                // <<players[i].getx()<< " iy "<<players[i].gety()<<" px "<<players[pn].getx()<< " py "<<players[pn].gety();
-                // cin>>temp;
-                // if not at goal send home
-                if (! ((players[i].getx() == 5) && (players[i].gety() == 5 )))
-                    players[i].goHome();
-                // we know i and pn are in the same location
-                if (((players[pn].getx() == 5) && (players[pn].gety() == 5 )))
-                {
-                    if (i == (pn + 4) || i == (pn - 4))
-                    {
-                        // gotoxy(10, 58);
-                        // cout<<"You win! Game over."; // <<" i "<<i<<" pn "<<pn<<" xpos = "<<players[i].getx();
-                        return 1;
-                        // cin>>temp;
+	{
+	  // did we land on someone
+	  if ((players[pn].getx() == players[i].getx()) && (players[pn].gety() == players[i].gety()))
+	  {
+	    gotoxy(10, 55);
+	    // cout<<"You land on another player's piece."<<" i = "<<i<<" pn "<<pn<<" ix "
+	    // <<players[i].getx()<< " iy "<<players[i].gety()<<" px "<<players[pn].getx()<< " py "<<players[pn].gety();
+	    // cin>>temp;
+	    // if not at goal send home
+	    if (! ((players[i].getx() == 5) && (players[i].gety() == 5 )))
+	      players[i].goHome();
+	    // we know i and pn are in the same location
+	    if (((players[pn].getx() == 5) && (players[pn].gety() == 5 )))
+	      {
+		if (i == (pn + 4) || i == (pn - 4))
+		  {
+		    // gotoxy(10, 58);
+		    // cout<<"You win! Game over."; // <<" i "<<i<<" pn "<<pn<<" xpos = "<<players[i].getx();
+		    return 1;
+		    // cin>>temp;
+		    
+		  }
+	      }
 
-                    }
-                }
+	  }
+	}
 
-            }
-
-        }
+      }
     }
     return 0;
 }
@@ -774,7 +778,7 @@ void Board::execute()
                     diceRoll = "r";
                 }
         */
-// Moving multiple pieces (piece 1 or piece 2) Line
+	// Moving multiple pieces (piece 1 or piece 2) Line
 	gotoxy(1, 47);
 	cout<<" Piece Moving: "<<players[pnIndex].getpname();
         gotoxy(0, 48);
