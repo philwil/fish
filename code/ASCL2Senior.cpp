@@ -18,15 +18,18 @@ void sortStrings (string str1, string str2, string & result)
      for (int j = 0; j < str1.length(); j++)
      {
          // cout<<"J = "<<j<<" Str1 : "<<str1[j]<<endl; // Passing by value
-         size_t pos = str2.find(str1[j]);
-         // cout<<"pos "<<pos<<endl;
-         if (pos <= str2.length())
-         {
-            result += str1[j];
-            str2 = str2.substr(pos + 1);
+         if(str1[j] != ' ')
+	 {
+           size_t pos = str2.find(str1[j]);
+           // cout<<"pos "<<pos<<endl;
+           if (pos <= str2.length())
+           {
+              result += str1[j];
+              str2 = str2.substr(pos + 1);
             // cout<<"Result: "<<result<<endl;
             // cout<<"str2 "<<str2<<endl;
-         }
+           }
+	 }
 
      }
 }

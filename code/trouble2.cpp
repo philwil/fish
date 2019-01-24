@@ -27,7 +27,7 @@ void gotoxy(int x, int y)
 	SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), coord);
 }
 #else
-void gotoxy(int x, int y)
+void gotoxy(int y, int x)
 {
           printf("%c[%d;%dH",0x1b,x,y);
 	  //	coord.X = x;
@@ -55,19 +55,26 @@ public:
   int getx(){return xpos;}
   int gety(){return ypos;}
   char getc(){return color;}
+  string getn(){return piecenumber;}
   string getpname();
   // int getd();
-  void init(int x, int y, char c){
+  void init(int x, int y, string c){
     xpos = 0;
     ypos = 0;
     initx=x;
     inity=y;
-    color = c;
+    piecenumber = c;
     got1 = 0;
     got2 = 0;
     got3 = 0;
     play = 0;
   };
+  
+  void setXY(int x, int y) {
+    xpos = x;
+    ypos = y;
+  };
+  
   void setC(char c){color = c;};
   // void setd();
   void piecemove(int n, int d1, int d2);
@@ -89,8 +96,10 @@ private:
 public:
   void boarddisplay();
   void movepiece(int n, int d1, int d2);
-  void initplayer(int n, int d1, int d2, char c);
+  void initplayer(int n, int d1, int d2, string c);
+  void setplayer(int n, int d1, int d2);
   void getXY(int n, int &d1, int &d2);
+  void setXY(int n, int d1, int d2);
   void setC(int n, char c);
   void getC(int n, char &c);
   
@@ -108,6 +117,11 @@ public:
   void display(); // displays the board and the pieces on the board
 };
 
+int Board::roll(void)
+{
+  int r=(rand() % 3) + 1 ;
+  return r;
+}
 
 Piece::Piece(int x, int y, char c, int p)
 {
@@ -137,6 +151,14 @@ void Board::getXY(int n, int &d1, int &d2)
   d2=  np->gety();
 }
 
+void Board::setXY(int n, int d1, int d2)
+{
+  Piece *np = &players[n];
+  np->setXY(d1, d2);
+}
+
+
+
 void Board::getC(int n, char &c)
 {
   Piece *np = &players[n];
@@ -144,10 +166,16 @@ void Board::getC(int n, char &c)
 
 }
 
-void Board::initplayer(int n, int x, int y, char c)
+void Board::initplayer(int n, int x, int y, string c)
 {
   Piece *np = &players[n];
   np->init(x,y,c);
+}
+
+void Board::setplayer(int n, int x, int y)
+{
+  Piece *np = &players[n];
+  np->setXY(x,y);
 }
 
 void Board::boarddisplay()
@@ -175,8 +203,9 @@ void Board::boarddisplay()
       Piece *p = &players[i];
       if (p->getx() > 0 )
 	{
-	  gotoxy (3 + (p->getx() * 6), 3 + (p->gety() * 3));
-	  cout<<p->getc() << i %2;
+	  //	  gotoxy (3 + (p->getx() * 1), 1 + (p->gety() * 1));
+	  gotoxy (3 + ((p->getx()-1) * 6), 3 + ((p->gety()-1) * 3));
+	  cout<<p->getn();
 	}
     }
 }
@@ -295,21 +324,39 @@ int main ()
     ans = "a";
     int mnum = 1;
     int player = 0;
-    b.initplayer(0, 1, 5, 'r');
-    b.initplayer(1, 1, 5, 'r');
-    b.initplayer(2, 5, 1, 'g');
-    b.initplayer(3, 5, 1, 'g');
-    b.initplayer(4, 10, 5, 'y');
-    b.initplayer(5, 10, 5, 'y');
-    b.initplayer(6, 5, 10, 'b');
-    b.initplayer(7, 5, 10, 'b');
+    b.initplayer(0, 1, 5, "R1");
+    b.initplayer(1, 1, 5, "R2");
+    b.initplayer(2, 5, 1, "G1");
+    b.initplayer(3, 5, 1, "G2");
+    b.initplayer(4, 10, 5, "Y1");
+    b.initplayer(5, 10, 5, "Y2");
+    b.initplayer(6, 5, 10, "B1");
+    b.initplayer(7, 5, 10, "B2");
 
     //b.boarddisplay();
+    int play;
+    int xpos;
+    int ypos;
+    cout << " Enter player xpos ypos ";    
+    do  {
+      
+
+      cin>>play;
+      cin>>xpos;
+      cin>>ypos;
+      cout << endl;
+      cout << " player "<< play << " xpos " <<xpos<<" ypos " << ypos << endl;
+      b.setplayer(play, xpos, ypos);
+      b.boarddisplay();
+      
+    } while (play >= 0);
+    return 0;
 
     do  {
         cin>>ans;
-        dice1 = (rand() % 3) + 1 ;
-        dice2 = (rand() % 3) + 1;
+        dice1 = b.roll();
+        dice2 = b.roll();
+	
 	int oldx, oldy;
 	int newx, newy;
 	
