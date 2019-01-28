@@ -114,10 +114,10 @@ void testStr(void)
 
 int main ()
 {
+  testStr(); // comment out to use file
+    return 0; // comment out to use file
     string str1, str2, str, result, result1, result2, result3, result4;
     ifstream infile;
-    testStr();
-    return 0;
     
     infile.open("test2.txt", ifstream::in);
     for (int i = 0; i < 5; i++)
