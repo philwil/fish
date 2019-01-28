@@ -70,10 +70,16 @@ void findCommon (string str1, string str2, string str3, string str4, string & re
     }
 }
 
-int main ()
+/*
+This should return
+1 result RL 4 res1 123 rt1 4
+1 result LR 5 res2 6789 rt2 5
+2 result RL 54 res1 123 rt1 54
+2 result LR 45 res2 6789 rt2 45
+*/
+
+void testStr(void)
 {
-    string str1, str2, str, result, result1, result2, result3, result4;
-    ifstream infile;
     string strt1 = "5";
     string strt2 = "123456789";
     string rt1 = "";
@@ -104,8 +110,14 @@ int main ()
 
     cout<<"2 result RL "<<rt1<< " res1 " << res1<< " rt1 " << rt1 << endl;
     cout<<"2 result LR "<<rt2<<" res2 " << res2 << " rt2 " << rt2 << endl;
+}
 
-    //return 0;
+int main ()
+{
+    string str1, str2, str, result, result1, result2, result3, result4;
+    ifstream infile;
+    testStr();
+    return 0;
     
     infile.open("test2.txt", ifstream::in);
     for (int i = 0; i < 5; i++)
