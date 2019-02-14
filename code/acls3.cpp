@@ -69,24 +69,41 @@ Board::Board(int rx, int cx, int sx, int nx, int n1x, int n2x, int n3x, int n4x,
     numPieces = 0;
     finish = 0;
 }
+
 int Board::blockedX (int sx, int x)
 {
   for (int i = 0; i < x; i++)
     {
       if ((sx+i) == (n1))
-	return 1;
+	{
+	  cout<< " ... blocked at n1  "<< n1 << endl;
+	  return 1;
+	}
       
       if ((sx+i) == (n2))
-	return 1;
+	{
+	  cout<< " ... blocked at n2  "<< n2 << endl;
+	  return 1;
+	}
       
       if ((sx+i) == (n3))
-	return 1;
-      
+	{
+	  cout<< " ... blocked at n3  "<< n3 << endl;
+	  return 1;
+	}
+
       if ((sx+i) == (n4))
-	return 1;
+	{
+	  cout<< " ... blocked at n4  "<< n4 << endl;
+	  return 1;
+	}
       
         if ((sx+i) == (n5))
-	  return 1;
+	  {
+	    cout<< " ... blocked at n5  "<< n5 << endl;
+	    return 1;
+	  }
+	
     }
   return 0;
 }
@@ -197,54 +214,78 @@ int Board::addPieceRL (Piece &p)
   y = (s-1) / c;
   minY = (y+1) * c;
   minY -= c;
-  cout<<"row: "<<y+1 << " beginning  of row: " << minY <<endl;
+  minY += 1;
+  
+  cout<<"addPieceRL row: "<<y+1 << " beginning  of row: " << minY <<endl;
 
   //cout<<"y: "<<y<<endl;
   sx = s;
   x = p.x3;
-  if (blockedX(sx-p.x3-1, p.x3 + 1))
+  if(p.x3 > 0 )
     {
-      cout<< " Blocked X2 "<< endl;
-      return -1;
+      cout<<"Checking Blocked X from  "<<sx-p.x3-1 << " num " << p.x3+1 <<endl;
+      
+      if (blockedX(sx-p.x3-1, p.x3 + 1))
+	{
+	  cout<< " Blocked X2 "<< endl;
+	  return -1;
+	}
+      if ((s-x) < minY)
+	{
+	  return -1;
+	}
+      sx =  s-x;
     }
-  if ((s-x) < minY)
+  if(p.x2 > 0 )
     {
-      return -1;
+      cout<<"Checking Blocked Y from  "<< sx - (c *p.x2) << " num " << p.x2 <<endl;
+      
+      if (blockedY(sx - (c *p.x2), p.x2))
+	{
+	  cout<< " Blocked Y "<< endl;
+	  return -1;
+	}
+      x += p.x2*c;
+      minY -= p.x2*c;
+      sx =  s-x;
+      
+      if ((s-x) < minY)
+	{
+	  return -1;
+	}
     }
-  sx =  s-x;
-  if (blockedY(sx - (c *p.x2), p.x2))
-    {
-      cout<< " Blocked Y "<< endl;
-      return -1;
-    }
-  x += p.x2*c;
-  minY -= p.x2*c;
-  sx =  s-x;
-  
-  if ((s-x) < minY)
-    {
-      return -1;
-    }
-  if (blockedX(sx-p.x1-1, p.x1 + 1))
-    {
-      cout<< " Blocked X1 "<< endl;
-      return -1;
-    }
-  
-  x += p.x1;
-  if ((s - x) < minY)
-    {
-      return -1;
-    }
-  if ((x+s) > (r*c))
-    {
-      x = -1;
-    }
-  if ((s-x) == minY)
-    {
-      cout<<"x: "<<x<<" s: "<<s<<" minY: "<<minY<<endl;
-      finish = 1;
-    }
+if(p.x1 > 0 )
+  {
+    
+    cout<<"Checking Blocked X from  "<<sx-(p.x1+1) << " num " << p.x1 <<endl;
+    
+    if (blockedX(sx-(p.x1+1), p.x1 ))
+      {
+	cout<< " Blocked X1 "<< endl;
+	return -1;
+      }
+    
+    x += p.x1;
+    if ((s - x) < minY)
+      {
+	cout<< " Blocked X Min s: "<< s << " x: " << x
+	    << " minY : " << minY<< endl;
+
+	return -1;
+      }
+    if ((s-x) < 0)
+      {
+	cout<< " Blocked X Min s: "<< s << " x: " << x
+	    << endl;
+	return -1;
+
+      }
+  }
+ if ((s-x) == minY)
+   {
+     cout<<"x: "<<x<<" s: "<<s<<" minY: "<<minY<<endl;
+     finish = 1;
+   }
   return x;
 }
 
@@ -295,7 +336,11 @@ int runGame(int r, int c, int s, int n, int n1, int n2, int n3, int n4, int n5)
     int div =  s/c;
     if((div * c) == s ) dir = 1;
     
-    cout<<"Run game start S: " << s << " div *c : " << div *c <<endl;
+    cout<<"Run game start s: " << s
+	<< " div *c : " << div *c
+	<< " dir : " << dir
+	<<endl;
+    
     Board b (r, c, s, n, n1, n2, n3, n4 ,n5);
     // b.s = (c - 1);
     // b.n1 = (c-1);
@@ -316,14 +361,14 @@ int runGame(int r, int c, int s, int n, int n1, int n2, int n3, int n4, int n5)
 	}
       else
 	{
-	  if (dir == 1 ) x = -x;
+	  //if (dir == 1 ) x = -x;
 
 	  olds=b.s;
 	  
 	  if(dir == 0)
 	    b.s += x+1;
 	  else
-	    b.s -= (x+1);
+	    b.s -= (x+2);
 	    
 	  cout<<"Used piece " << pieces[j].n << " x is " << x
 	      << " s moved from  "<< olds<< " to "<< b.s<< endl; 
@@ -332,6 +377,9 @@ int runGame(int r, int c, int s, int n, int n1, int n2, int n3, int n4, int n5)
 	  b.numPieces++;
 	  if (b.finish)
 	    {
+	      cout << endl;
+	      cout << endl;
+	      cout << endl;
 	      cout<<">>>>Result = ";
 	      for (i = 0; i < b.numPieces; i++)
 		{
