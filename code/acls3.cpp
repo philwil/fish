@@ -119,25 +119,30 @@ int Board::blockedY (int sx, int x)
 	  << sx+(i *c) << endl;
 
       if (sx + (i*c) == (n1))
-	return 1;
-      cout<< " ... its not n1  "<< n1 << endl;
-      
+	{
+	  cout<< " ... blocked at n1  "<< n1 << endl;
+	  return 1;
+	}
       if (sx + (i*c) == (n2))
-	return 1;
-      cout<< " ... its not n2  "<< n2 << endl;
-      
+	{
+	  cout<< " ... blocked at n2  "<< n2 << endl;
+	  return 1;
+	}
       if (sx + (i*c) == (n3))
-	return 1;
-      cout<< " ... its not n3  "<< n3 << endl;
-      
+	{
+	  cout<< " ... blocked at n3  "<< n3 << endl;
+	  return 1;
+	}
       if (sx + (i*c) == (n4))
-	return 1;
-      cout<< " ... its not n4  "<< n4 << endl;
-      
+	{
+	  cout<< " ... blocked at n4  "<< n4 << endl;
+	  return 1;
+	}
       if (sx + (i*c) == (n5))
-            return 1;
-      cout<< " ... its not n5  "<< n5 << endl;
-
+	{
+	  cout<< " ... blocked at n5  "<< n5 << endl;
+	  return 1;
+	}
     }
   return 0;
 }
@@ -232,6 +237,7 @@ int Board::addPieceRL (Piece &p)
 	}
       if ((s-x) < minY)
 	{
+	  cout<< " (s-x) @1 " << (s - x)<< " minY " << minY << endl;
 	  return -1;
 	}
       sx =  s-x;
@@ -251,10 +257,11 @@ int Board::addPieceRL (Piece &p)
       
       if ((s-x) < minY)
 	{
+	  cout<< " (s-x) @2 " << (s - x)<< " minY " << minY << endl;
 	  return -1;
 	}
     }
-if(p.x1 > 0 )
+  if(p.x1 > 0 )
   {
     
     cout<<"Checking Blocked X from  "<<sx-(p.x1+1) << " num " << p.x1 <<endl;
