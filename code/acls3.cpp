@@ -25,13 +25,23 @@ public:
     int x3;
 };
 
+// this is the location of a piece
+class Place
+{
+public:
+  Place(){};
+  int start;
+  int end;
+  int piece;
+};
+  
 int Piece::init(char nx, int x1x, int x2x, int x3x)
 {
     n = nx;
     x1 = x1x;
     x2 = x2x;
     x3 = x3x;
-}
+};
 
 class Board
 {
@@ -40,6 +50,7 @@ class Board
     int r;
     int c;
     int pieces [10];
+    Place places[10];
     int numPieces;
     int s;
     int n;
@@ -234,113 +245,7 @@ int Board::addPieceRL (int st, Piece &p)
   else
     finish = 0;
   return x;
-  /*  
-  x = p.x3;
-  if(p.x3 > 0 )
-    {
-      cout<<"Checking Blocked X from  "<<sx-p.x3-1 << " num " << p.x3+1 <<endl;
-      
-      if (blockedX(sx-p.x3-1, p.x3 + 1))
-	{
-	  cout<< " Blocked X2 "<< endl;
-	  return -1;
-	}
-      if ((st-x) < minY)
-	{
-	  cout<< " (st-x) @1 " << (st - x)<< " minY " << minY << endl;
-	  return -1;
-	}
-      sx =  st-x;
-    }
-  if(p.x2 > 0 )
-    {
-      cout<<"Checking Blocked Y from  "<< sx - (c *p.x2) << " num " << p.x2 <<endl;
-      
-      if (blockedY(sx - (c *p.x2), p.x2))
-	{
-	  cout<< " Blocked Y "<< endl;
-	  return -1;
-	}
-      x += p.x2*c;
-      minY -= p.x2*c;
-      sx =  s-x;
-      
-      if ((st-x) < minY)
-	{
-	  cout<< " (st-x) @2 " << (st - x)<< " minY " << minY << endl;
-	  return -1;
-	}
-    }
-  if(p.x1 > 0 )
-  {
-    
-    cout<<"Checking Blocked X from  "<<sx-(p.x1+1) << " num " << p.x1 <<endl;
-    
-    if (blockedX(sx-(p.x1+1), p.x1 ))
-      {
-	cout<< " Blocked X1 "<< endl;
-	return -1;
-      }
-    
-    x += p.x1;
-    if ((st - x) < minY)
-      {
-	cout<< " Blocked X Min s: "<< st << " x: " << x
-	    << " minY : " << minY<< endl;
-
-	return -1;
-      }
-    if ((st-x) < 0)
-      {
-	cout<< " Blocked X Min s: "<< st << " x: " << x
-	    << endl;
-	return -1;
-
-      }
-  }
- if ((st-x) == minY)
-   {
-     cout<<"x: "<<x<<" s: "<<st<<" minY: "<<minY<<endl;
-     finish = 1;
-   }
-  return x;
-  */
 }
-
-#if 0
-//int Board::addPieceRL (Piece & p)
-{
-  int x;
-  int maxY;
-  int y;
-  y = (s-1) / c;
-  maxY = (y+1) * c;
-  cout<<"row: "<<y+1 << " end of row: " << maxY <<endl;
-  x = p.x1;
-  if ((x+s) > maxY)
-    {
-      return -1;
-    }
-  x += p.x2*r;
-    maxY += p.x2*c;
-    if ((x+s) > maxY)
-      {
-        x = -1;
-        return x;
-      }
-    x += p.x3;
-    if ((x+s) > maxY)
-      {
-        x = -1;
-        return x;
-      }
-    if ((x+s) > (r*c))
-      {
-        x = -1;
-      }
-    return x;
-}
-#endif
 
 Piece pieces [3];
 
@@ -387,7 +292,9 @@ int runGame(int r, int c, int s, int n, int n1, int n2, int n3, int n4, int n5)
 	  olds=b.s;
 	  
 	  if(dir == 0)
-	    b.s += x+1;
+	    {
+	      b.s += x+1;
+	    }
 	  else
 	    {
 	      b.s -= (x+1);
@@ -400,7 +307,19 @@ int runGame(int r, int c, int s, int n, int n1, int n2, int n3, int n4, int n5)
 	  cout<<"Used piece " << pieces[j].n << " x is " << x
 	      << " s moved from  "<< olds<< " to "<< b.s<< endl; 
 
+
 	  b.pieces[b.numPieces] = j;
+	  b.places[b.numPieces].piece=j ;
+	  if(dir == 0)
+	    {
+	      b.places[b.numPieces].start=olds ;
+	      b.places[b.numPieces].end=b.s ;
+	    }
+	  else
+	    {
+	      b.places[b.numPieces].end=olds ;
+	      b.places[b.numPieces].start=b.s+1 ;
+	    }
 	  b.numPieces++;
 	  if (b.finish)
 	    {
@@ -423,6 +342,35 @@ int runGame(int r, int c, int s, int n, int n1, int n2, int n3, int n4, int n5)
 		    }
 		}
 	      cout<<endl;
+	      cout<<">>>>Places = ";
+
+	      if(dir == 0)
+		{
+		  for (i = 0; i < b.numPieces; i++)
+		    {
+		      cout << " Piece # "
+			   <<b.places[i].piece
+			   << " start "
+			   <<b.places[i].start
+			   << " end "
+			   <<b.places[i].end
+			   << endl;
+		    }
+		}
+	      else
+		{
+		  
+		  for (i = b.numPieces-1; i>=0; i--)
+		    {
+		      cout << " Piece # "
+			   <<b.places[i].piece
+			   << " start "
+			   <<b.places[i].start
+			   << " end "
+			   <<b.places[i].end
+			   << endl;
+		    }
+		}
 	      return 0;
 	    }
 	}
