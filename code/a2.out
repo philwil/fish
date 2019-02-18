@@ -1,0 +1,483 @@
+
+
+
+
+String read =  8 14 15 2 98 81
+r: 8 c: 14 s: 15 n: 2 n1: 98 n2: 81
+Run game start s: 15 div *c : 14 dir : 0
+ row [1] 1 ....  14
+ row [2] 15 ....  28
+ row [3] 29 ....  42
+ row [4] 43 ....  56
+ row [5] 57 ....  70
+ row [6] 71 ....  84
+ row [7] 85 ....  98
+ row [8] 99 ....  112
+Run 0 Checking piece A S is: 15
+row: 2 end of row: 28
+ Checking Blocked Y  sx: 17 x:0
+Used piece A x is 2 s moved from  15 to 18 b.finish 0
+markBlocked piece = 0 x1 = 2 x2 = 0 x3 = 0
+Board done 0
+Run 1 Checking piece B S is: 18
+row: 2 end of row: 28
+ Checking Blocked Y  sx: 18 x:1
+ Checking Blocked Y at i 0 sx+ (i * c): 18
+Used piece B x is 15 s moved from  18 to 34 b.finish 0
+markBlocked piece = 1 x1 = 0 x2 = 1 x3 = 1
+Board done 0
+Run 2 Checking piece C S is: 34
+row: 3 end of row: 42
+ Checking Blocked Y  sx: 35 x:2
+ Checking Blocked Y at i 0 sx+ (i * c): 35
+ Checking Blocked Y at i 1 sx+ (i * c): 49
+Used piece C x is 29 s moved from  34 to 64 b.finish 0
+markBlocked piece = 2 x1 = 1 x2 = 2 x3 = 0
+Board done 0
+Run 3 Checking piece A S is: 64
+row: 5 end of row: 70
+ Checking Blocked Y  sx: 66 x:0
+Used piece A x is 2 s moved from  64 to 67 b.finish 0
+markBlocked piece = 0 x1 = 2 x2 = 0 x3 = 0
+Board done 0
+Run 4 Checking piece B S is: 67
+row: 5 end of row: 70
+ Checking Blocked Y  sx: 67 x:1
+ Checking Blocked Y at i 0 sx+ (i * c): 67
+ ... blocked at n2  81
+ Blocked X2 
+You cannot use piece B b.finish 0
+Board done 0
+Run 5 Checking piece C S is: 67
+row: 5 end of row: 70
+ Checking Blocked Y  sx: 68 x:2
+ Checking Blocked Y at i 0 sx+ (i * c): 68
+ Checking Blocked Y at i 1 sx+ (i * c): 82
+Used piece C x is 29 s moved from  67 to 97 b.finish 0
+markBlocked piece = 2 x1 = 1 x2 = 2 x3 = 0
+Board done 0
+Run 6 Checking piece A S is: 97
+row: 7 end of row: 98
+ ... blocked at n1  98
+ Blocked X1 
+You cannot use piece A b.finish 0
+Board done 0
+Run 7 Checking piece B S is: 97
+row: 7 end of row: 98
+ Checking Blocked Y  sx: 97 x:1
+ Checking Blocked Y at i 0 sx+ (i * c): 97
+finish x: 15 s: 97 maxY: 112
+Used piece B x is 15 s moved from  97 to 113 b.finish 1
+markBlocked piece = 1 x1 = 0 x2 = 1 x3 = 1
+
+
+
+>>>>Result = ABCACB
+>>>>Places =  Piece # 0 start 15 end 18
+ Piece # 1 start 18 end 34
+ Piece # 2 start 34 end 64
+ Piece # 0 start 64 end 67
+ Piece # 2 start 67 end 97
+ Piece # 1 start 97 end 113
+
+
+
+
+String read =  5 12 60 2 15 48
+r: 5 c: 12 s: 60 n: 2 n1: 15 n2: 48
+Run game start s: 60 div *c : 60 dir : 1
+ row [1] 1 ....  12
+ row [2] 13 ....  24
+ row [3] 25 ....  36
+ row [4] 37 ....  48
+ row [5] 49 ....  60
+Run 0 Checking piece A S is: 60
+addPieceRL row: 5 beginning  of row: 49
+addPieceRL new sx: 58 beginning  of row: 49
+row: 5 end of row: 60
+ Checking Blocked Y  sx: 60 x:0
+finish x: 2 s: 58 maxY: 60
+ x= 2 minY= 49 finish 2 0
+Used piece A x is 2 s moved from  60 to 57 b.finish 0
+markBlocked piece = 0 x1 = 2 x2 = 0 x3 = 0
+Board done 0
+Run 1 Checking piece B S is: 57
+addPieceRL row: 4 beginning  of row: 37
+addPieceRL new sx: 44 beginning  of row: 37
+row: 4 end of row: 48
+ Checking Blocked Y  sx: 44 x:1
+ Checking Blocked Y at i 0 sx+ (i * c): 44
+ x= 13 minY= 37 finish 2 0
+Used piece B x is 13 s moved from  57 to 43 b.finish 0
+markBlocked piece = 1 x1 = 0 x2 = 1 x3 = 1
+Board done 0
+Run 2 Checking piece C S is: 43
+addPieceRL row: 2 beginning  of row: 13
+addPieceRL new sx: 18 beginning  of row: 13
+row: 2 end of row: 24
+ Checking Blocked Y  sx: 19 x:2
+ Checking Blocked Y at i 0 sx+ (i * c): 19
+ Checking Blocked Y at i 1 sx+ (i * c): 31
+ x= 25 minY= 13 finish 2 0
+Used piece C x is 25 s moved from  43 to 17 b.finish 0
+markBlocked piece = 2 x1 = 1 x2 = 2 x3 = 0
+Board done 0
+Run 3 Checking piece A S is: 17
+addPieceRL row: 2 beginning  of row: 13
+addPieceRL new sx: 15 beginning  of row: 13
+row: 2 end of row: 24
+ ... blocked at n1  15
+ Blocked X1 
+ x= -1 minY= 13 finish 2 0
+You cannot use piece A b.finish 0
+Board done 0
+Run 4 Checking piece B S is: 17
+addPieceRL row: 1 beginning  of row: 1
+addPieceRL new sx: 4 beginning  of row: 1
+row: 1 end of row: 12
+ Checking Blocked Y  sx: 4 x:1
+ Checking Blocked Y at i 0 sx+ (i * c): 4
+ x= 13 minY= 1 finish 2 0
+Used piece B x is 13 s moved from  17 to 3 b.finish 0
+markBlocked piece = 1 x1 = 0 x2 = 1 x3 = 1
+Board done 0
+Run 5 Checking piece C S is: 3
+addPieceRL row: 0 beginning  of row: -11
+addPieceRL new sx: -22 beginning  of row: -11
+You cannot use piece C b.finish 0
+Board done 0
+Run 6 Checking piece A S is: 3
+addPieceRL row: 1 beginning  of row: 1
+addPieceRL new sx: 1 beginning  of row: 1
+row: 1 end of row: 12
+ Checking Blocked Y  sx: 3 x:0
+ x= 2 minY= 1 finish 2 0
+Finished because b.s: 0  == i * c: 0
+Used piece A x is 2 s moved from  3 to 0 b.finish 1
+markBlocked piece = 0 x1 = 2 x2 = 0 x3 = 0
+
+
+
+>>>>Result = ABCBA
+>>>>Places =  Piece # 0 start 1 end 3
+ Piece # 1 start 4 end 17
+ Piece # 2 start 18 end 43
+ Piece # 1 start 44 end 57
+ Piece # 0 start 58 end 60
+
+
+
+
+String read =  7 17 119 2 37 22
+r: 7 c: 17 s: 119 n: 2 n1: 37 n2: 22
+Run game start s: 119 div *c : 119 dir : 1
+ row [1] 1 ....  17
+ row [2] 18 ....  34
+ row [3] 35 ....  51
+ row [4] 52 ....  68
+ row [5] 69 ....  85
+ row [6] 86 ....  102
+ row [7] 103 ....  119
+Run 0 Checking piece A S is: 119
+addPieceRL row: 7 beginning  of row: 103
+addPieceRL new sx: 117 beginning  of row: 103
+row: 7 end of row: 119
+ Checking Blocked Y  sx: 119 x:0
+finish x: 2 s: 117 maxY: 119
+ x= 2 minY= 103 finish 2 0
+Used piece A x is 2 s moved from  119 to 116 b.finish 0
+markBlocked piece = 0 x1 = 2 x2 = 0 x3 = 0
+Board done 0
+Run 1 Checking piece B S is: 116
+addPieceRL row: 6 beginning  of row: 86
+addPieceRL new sx: 98 beginning  of row: 86
+row: 6 end of row: 102
+ Checking Blocked Y  sx: 98 x:1
+ Checking Blocked Y at i 0 sx+ (i * c): 98
+ x= 18 minY= 86 finish 2 0
+Used piece B x is 18 s moved from  116 to 97 b.finish 0
+markBlocked piece = 1 x1 = 0 x2 = 1 x3 = 1
+Board done 0
+Run 2 Checking piece C S is: 97
+addPieceRL row: 4 beginning  of row: 52
+addPieceRL new sx: 62 beginning  of row: 52
+row: 4 end of row: 68
+ Checking Blocked Y  sx: 63 x:2
+ Checking Blocked Y at i 0 sx+ (i * c): 63
+ Checking Blocked Y at i 1 sx+ (i * c): 80
+ x= 35 minY= 52 finish 2 0
+Used piece C x is 35 s moved from  97 to 61 b.finish 0
+markBlocked piece = 2 x1 = 1 x2 = 2 x3 = 0
+Board done 0
+Run 3 Checking piece A S is: 61
+addPieceRL row: 4 beginning  of row: 52
+addPieceRL new sx: 59 beginning  of row: 52
+row: 4 end of row: 68
+ Checking Blocked Y  sx: 61 x:0
+ x= 2 minY= 52 finish 2 0
+Used piece A x is 2 s moved from  61 to 58 b.finish 0
+markBlocked piece = 0 x1 = 2 x2 = 0 x3 = 0
+Board done 0
+Run 4 Checking piece B S is: 58
+addPieceRL row: 3 beginning  of row: 35
+addPieceRL new sx: 40 beginning  of row: 35
+row: 3 end of row: 51
+ Checking Blocked Y  sx: 40 x:1
+ Checking Blocked Y at i 0 sx+ (i * c): 40
+ x= 18 minY= 35 finish 2 0
+Used piece B x is 18 s moved from  58 to 39 b.finish 0
+markBlocked piece = 1 x1 = 0 x2 = 1 x3 = 1
+Board done 0
+Run 5 Checking piece C S is: 39
+addPieceRL row: 1 beginning  of row: 1
+addPieceRL new sx: 4 beginning  of row: 1
+row: 1 end of row: 17
+ Checking Blocked Y  sx: 5 x:2
+ Checking Blocked Y at i 0 sx+ (i * c): 5
+ Checking Blocked Y at i 1 sx+ (i * c): 22
+ ... blocked at n2  22
+ Blocked Y1
+ x= -1 minY= 1 finish 2 0
+You cannot use piece C b.finish 0
+Board done 0
+Run 6 Checking piece A S is: 39
+addPieceRL row: 3 beginning  of row: 35
+addPieceRL new sx: 37 beginning  of row: 35
+row: 3 end of row: 51
+ ... blocked at n1  37
+ Blocked X1 
+ x= -1 minY= 35 finish 2 0
+You cannot use piece A b.finish 0
+Board done 0
+Run 7 Checking piece B S is: 39
+addPieceRL row: 2 beginning  of row: 18
+addPieceRL new sx: 21 beginning  of row: 18
+row: 2 end of row: 34
+ Checking Blocked Y  sx: 21 x:1
+ Checking Blocked Y at i 0 sx+ (i * c): 21
+ x= 18 minY= 18 finish 2 0
+Used piece B x is 18 s moved from  39 to 20 b.finish 0
+markBlocked piece = 1 x1 = 0 x2 = 1 x3 = 1
+Board done 0
+Run 8 Checking piece C S is: 20
+addPieceRL row: 1 beginning  of row: 1
+addPieceRL new sx: -15 beginning  of row: 1
+You cannot use piece C b.finish 0
+Board done 0
+Run 9 Checking piece A S is: 20
+addPieceRL row: 2 beginning  of row: 18
+addPieceRL new sx: 18 beginning  of row: 18
+row: 2 end of row: 34
+ Checking Blocked Y  sx: 20 x:0
+ x= 2 minY= 18 finish 2 0
+Finished because b.s: 17  == i * c: 17
+Used piece A x is 2 s moved from  20 to 17 b.finish 1
+markBlocked piece = 0 x1 = 2 x2 = 0 x3 = 0
+
+
+
+>>>>Result = ABBACBA
+>>>>Places =  Piece # 0 start 18 end 20
+ Piece # 1 start 21 end 39
+ Piece # 1 start 40 end 58
+ Piece # 0 start 59 end 61
+ Piece # 2 start 62 end 97
+ Piece # 1 start 98 end 116
+ Piece # 0 start 117 end 119
+
+
+
+
+String read =  6 13 52 2 23 35
+r: 6 c: 13 s: 52 n: 2 n1: 23 n2: 35
+Run game start s: 52 div *c : 52 dir : 1
+ row [1] 1 ....  13
+ row [2] 14 ....  26
+ row [3] 27 ....  39
+ row [4] 40 ....  52
+ row [5] 53 ....  65
+ row [6] 66 ....  78
+Run 0 Checking piece A S is: 52
+addPieceRL row: 4 beginning  of row: 40
+addPieceRL new sx: 50 beginning  of row: 40
+row: 4 end of row: 52
+ Checking Blocked Y  sx: 52 x:0
+finish x: 2 s: 50 maxY: 52
+ x= 2 minY= 40 finish 2 0
+Used piece A x is 2 s moved from  52 to 49 b.finish 0
+markBlocked piece = 0 x1 = 2 x2 = 0 x3 = 0
+Board done 0
+Run 1 Checking piece B S is: 49
+addPieceRL row: 3 beginning  of row: 27
+addPieceRL new sx: 35 beginning  of row: 27
+row: 3 end of row: 39
+ ... blocked at n2  35
+ Blocked X1 
+ x= -1 minY= 27 finish 2 0
+You cannot use piece B b.finish 0
+Board done 0
+Run 2 Checking piece C S is: 49
+addPieceRL row: 2 beginning  of row: 14
+addPieceRL new sx: 22 beginning  of row: 14
+row: 2 end of row: 26
+ ... blocked at n1  23
+ Blocked X1 
+ x= -1 minY= 14 finish 2 0
+You cannot use piece C b.finish 0
+Board done 0
+Run 3 Checking piece A S is: 49
+addPieceRL row: 4 beginning  of row: 40
+addPieceRL new sx: 47 beginning  of row: 40
+row: 4 end of row: 52
+ Checking Blocked Y  sx: 49 x:0
+ x= 2 minY= 40 finish 2 0
+Used piece A x is 2 s moved from  49 to 46 b.finish 0
+markBlocked piece = 0 x1 = 2 x2 = 0 x3 = 0
+Board done 0
+Run 4 Checking piece B S is: 46
+addPieceRL row: 3 beginning  of row: 27
+addPieceRL new sx: 32 beginning  of row: 27
+row: 3 end of row: 39
+ Checking Blocked Y  sx: 32 x:1
+ Checking Blocked Y at i 0 sx+ (i * c): 32
+ x= 14 minY= 27 finish 2 0
+Used piece B x is 14 s moved from  46 to 31 b.finish 0
+markBlocked piece = 1 x1 = 0 x2 = 1 x3 = 1
+Board done 0
+Run 5 Checking piece C S is: 31
+addPieceRL row: 1 beginning  of row: 1
+addPieceRL new sx: 4 beginning  of row: 1
+row: 1 end of row: 13
+ Checking Blocked Y  sx: 5 x:2
+ Checking Blocked Y at i 0 sx+ (i * c): 5
+ Checking Blocked Y at i 1 sx+ (i * c): 18
+ x= 27 minY= 1 finish 2 0
+Used piece C x is 27 s moved from  31 to 3 b.finish 0
+markBlocked piece = 2 x1 = 1 x2 = 2 x3 = 0
+Board done 0
+Run 6 Checking piece A S is: 3
+addPieceRL row: 1 beginning  of row: 1
+addPieceRL new sx: 1 beginning  of row: 1
+row: 1 end of row: 13
+ Checking Blocked Y  sx: 3 x:0
+ x= 2 minY= 1 finish 2 0
+Finished because b.s: 0  == i * c: 0
+Used piece A x is 2 s moved from  3 to 0 b.finish 1
+markBlocked piece = 0 x1 = 2 x2 = 0 x3 = 0
+
+
+
+>>>>Result = ACBAA
+>>>>Places =  Piece # 0 start 1 end 3
+ Piece # 2 start 4 end 31
+ Piece # 1 start 32 end 46
+ Piece # 0 start 47 end 49
+ Piece # 0 start 50 end 52
+
+
+
+
+String read =  10 18 19 1 81
+r: 10 c: 18 s: 19 n: 1 n1: 81 n2: 0
+Run game start s: 19 div *c : 18 dir : 0
+ row [1] 1 ....  18
+ row [2] 19 ....  36
+ row [3] 37 ....  54
+ row [4] 55 ....  72
+ row [5] 73 ....  90
+ row [6] 91 ....  108
+ row [7] 109 ....  126
+ row [8] 127 ....  144
+ row [9] 145 ....  162
+ row [10] 163 ....  180
+Run 0 Checking piece A S is: 19
+row: 2 end of row: 36
+ Checking Blocked Y  sx: 21 x:0
+Used piece A x is 2 s moved from  19 to 22 b.finish 0
+markBlocked piece = 0 x1 = 2 x2 = 0 x3 = 0
+Board done 0
+Run 1 Checking piece B S is: 22
+row: 2 end of row: 36
+ Checking Blocked Y  sx: 22 x:1
+ Checking Blocked Y at i 0 sx+ (i * c): 22
+Used piece B x is 19 s moved from  22 to 42 b.finish 0
+markBlocked piece = 1 x1 = 0 x2 = 1 x3 = 1
+Board done 0
+Run 2 Checking piece C S is: 42
+row: 3 end of row: 54
+ Checking Blocked Y  sx: 43 x:2
+ Checking Blocked Y at i 0 sx+ (i * c): 43
+ Checking Blocked Y at i 1 sx+ (i * c): 61
+Used piece C x is 37 s moved from  42 to 80 b.finish 0
+markBlocked piece = 2 x1 = 1 x2 = 2 x3 = 0
+Board done 0
+Run 3 Checking piece A S is: 80
+row: 5 end of row: 90
+ ... blocked at n1  81
+ Blocked X1 
+You cannot use piece A b.finish 0
+Board done 0
+Run 4 Checking piece B S is: 80
+row: 5 end of row: 90
+ Checking Blocked Y  sx: 80 x:1
+ Checking Blocked Y at i 0 sx+ (i * c): 80
+Used piece B x is 19 s moved from  80 to 100 b.finish 0
+markBlocked piece = 1 x1 = 0 x2 = 1 x3 = 1
+Board done 0
+Run 5 Checking piece C S is: 100
+row: 6 end of row: 108
+ Checking Blocked Y  sx: 101 x:2
+ Checking Blocked Y at i 0 sx+ (i * c): 101
+ Checking Blocked Y at i 1 sx+ (i * c): 119
+Used piece C x is 37 s moved from  100 to 138 b.finish 0
+markBlocked piece = 2 x1 = 1 x2 = 2 x3 = 0
+Board done 0
+Run 6 Checking piece A S is: 138
+row: 8 end of row: 144
+ Checking Blocked Y  sx: 140 x:0
+Used piece A x is 2 s moved from  138 to 141 b.finish 0
+markBlocked piece = 0 x1 = 2 x2 = 0 x3 = 0
+Board done 0
+Run 7 Checking piece B S is: 141
+row: 8 end of row: 144
+ Checking Blocked Y  sx: 141 x:1
+ Checking Blocked Y at i 0 sx+ (i * c): 141
+Used piece B x is 19 s moved from  141 to 161 b.finish 0
+markBlocked piece = 1 x1 = 0 x2 = 1 x3 = 1
+Board done 0
+Run 8 Checking piece C S is: 161
+row: 9 end of row: 162
+ Checking Blocked Y  sx: 162 x:2
+ Checking Blocked Y at i 0 sx+ (i * c): 162
+ Checking Blocked Y at i 1 sx+ (i * c): 180
+You cannot use piece C b.finish 0
+Board done 0
+Run 9 Checking piece A S is: 161
+row: 9 end of row: 162
+You cannot use piece A b.finish 0
+Board done 0
+Run 10 Checking piece B S is: 161
+row: 9 end of row: 162
+ Checking Blocked Y  sx: 161 x:1
+ Checking Blocked Y at i 0 sx+ (i * c): 161
+finish x: 19 s: 161 maxY: 180
+Used piece B x is 19 s moved from  161 to 181 b.finish 1
+markBlocked piece = 1 x1 = 0 x2 = 1 x3 = 1
+
+
+
+>>>>Result = ABCBCABB
+>>>>Places =  Piece # 0 start 19 end 22
+ Piece # 1 start 22 end 42
+ Piece # 2 start 42 end 80
+ Piece # 1 start 80 end 100
+ Piece # 2 start 100 end 138
+ Piece # 0 start 138 end 141
+ Piece # 1 start 141 end 161
+ Piece # 1 start 161 end 181
+
+
+
+
+String read =  
+r: 0 c: 0 s: 0 n: 0 n1: 0 n2: 0
