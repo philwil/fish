@@ -106,26 +106,36 @@ def getStrMap(bp, ip):
     print ip + "==>" + op
     return op
 
-def count1s(ip):
+def count1s(ip, max):
     num = 0
     for x in range (0,len(ip)):
-        if ip[x] == '1':
-            num += 1
+        if max > 0:
+            if ip[x] == '1':
+                num += 1
+                max -=1
+            else:
+                return num
         else:
             return num
+        
     return num
 
-def count0s(ip, debug=0):
+def count0s(ip, max, debug=0):
     num = 0
     for x in range (0,len(ip)):
         if debug:
             print x,
             print "val=",
             print ip[x]
-        if ip[x] == '0':
-            num += 1
+        if max > 0:
+            if ip[x] == '0':
+                num += 1
+                max -=1
+            else:
+                return num
         else:
             return num
+
     return num
         
             
@@ -136,18 +146,19 @@ def getStrLen(ip,val='1'):
         op += val
     return op
 
-def getMap(op):
+def getMap(op, max):
     idx = 1
     opmap = {}
     while len(op) > 0:
-        opmap[idx] = count1s(op) 
+        opmap[idx] =0
+        opmap[idx] = count1s(op, max) 
         op = op[opmap[idx]:]
         idx += 1
+        opmap[idx] =0
         if len(op) > 0:
-            opmap[idx] = count0s(op) 
+            opmap[idx] = count0s(op, max) 
             op = op[opmap[idx]:]
             idx += 1
-        
     return opmap
 
     
@@ -205,6 +216,7 @@ def main():
     print t4
     print t2
     base = '00001010000000000000100000000000'
+    base = '00001110000000000000100000000000'
     #base = bin(0x0a00080)
     print base
     #sys.exit(0)
@@ -227,15 +239,20 @@ def main():
     print "opt =",
     print opt
 
-    op8map = getMap(op8)
-    op4map = getMap(op4)
-    op2map = getMap(op2)
+    op8map = getMap(op8,8)
+    op4map = getMap(op4,4)
+    op2map = getMap(op2,2)
 
     print op8map
     print op4map
     print op2map
-
-
+    
+    for k in op2map.keys():
+        if op2map[k] < 2:
+            print "we have " ,
+            print 2 - op2map[k],
+            print "broken units in area ",
+            print k
     
 if __name__ == "__main__":
     main()
