@@ -146,11 +146,39 @@ def getStrLen(ip,val='1'):
         op += val
     return op
 
+# we expect 10 if we get 00 the first unit is broken if we get 11 second unit os broken
+def getLMap(op, broken):
+    idx = 1
+    opmap = {}
+    iidx = 0
+    for idx in broken.keys():
+        if broken[idx] == 2:
+            # none broken
+            opmap[iidx] = 1
+            opmap[iidx+1] = 1
+            op = op[2:]
+            
+        #only 1 is broken, find out which
+        elif   broken[idx] == 1:
+            if op[0] == '1':
+                opmap[iidx] = 1
+                opmap[iidx+1] = 0
+            else:
+                opmap[iidx] = 0
+                opmap[iidx+1] = 1
+            op = op[1:]
+
+        elif   broken[idx] == 0:
+            opmap[iidx] = 0
+            opmap[iidx+1] = 0
+        iidx += 2
+    return opmap
+            
 def getMap(op, max):
     idx = 1
     opmap = {}
     while len(op) > 0:
-        opmap[idx] =0
+        opmap[idx] = 0
         opmap[idx] = count1s(op, max) 
         op = op[opmap[idx]:]
         idx += 1
@@ -208,13 +236,10 @@ def main():
     t2 = t1 + t1 + t1 + t1  + t1 + t1 + t1 + t1
     
     
-    #t1 = t1 + getStrLen(8)
-    #t1 = t1 + getStrLen(8,'0')
-    #t1 = t1 + getStrLen(8)
-    #t1 = t1 + getStrLen(8,'0')
-    print t8
-    print t4
-    print t2
+    print "t8 =[" +t8 +"]"
+    print "t4 =[" +t4 +"]"
+    print "t2 =[" +t2 +"]"
+
     base = '00001010000000000000100000000000'
     base = '00001110000000000000100000000000'
     #base = bin(0x0a00080)
@@ -226,11 +251,7 @@ def main():
     
     op4 = getStrMap(base, t4)
     op2 = getStrMap(base, t2)
-    #op = getStrMap(base, getStrLen(4))
-    
-    #op = getStrMap(base,"11001100")
-    #op = getStrMap(base, "11111100")
-    #op = getStrMap(base, "111111111100")
+
     print " "
 
     print op8
@@ -246,14 +267,26 @@ def main():
     print op8map
     print op4map
     print op2map
-    
+    lastop = ""
     for k in op2map.keys():
         if op2map[k] < 2:
+            val = 2 - op2map[k]
             print "we have " ,
-            print 2 - op2map[k],
-            print "broken units in area ",
+            print val ,
+            print " broken units in area ",
             print k
+            lastop += '10'
+        else:
+            lastop += '10'
+    print lastop                
+
+    #repeat
+    op2l = getStrMap(base, lastop)
+    print op2l
     
+    op2lmap = getLMap(op2l,op2map)
+    print op2lmap
+
 if __name__ == "__main__":
     main()
     
