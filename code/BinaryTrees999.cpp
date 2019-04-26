@@ -150,12 +150,14 @@ void BNode::menu ()
     while (true) // while (! done)
     {
     cout<<"Choose 1, 2, or 3 to ----> 1. insert, 2. print, or 3. quit, respectively. : "<<endl;
-    cin>>choice;
+    //cin.getline(choice);
+    cin >> choice;
+    cin.ignore();
     if (choice == 1)
     {
         // Insert
         cout<<"Please input a word to be inserted: "<<endl;
-        cin>>word;
+        getline(cin,word);
         cout<<endl;
     /*
     if (word == "quit")
