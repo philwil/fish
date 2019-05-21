@@ -1,3 +1,4 @@
+#if 0
 // look for the new knode (string word) constructor
 
 
@@ -88,6 +89,7 @@ public:
       idx++;
     }
     y = y * setneg;
+    
         cout<<"Please input an X,Y coordinate (x,y): "<<endl;
     cin >>word;
     //        cin>>xcoor;
@@ -197,8 +199,9 @@ int main ()
     // 208, 128, 88
 }
 
+#endif
 
-On Mon, May 20, 2019 at 8:21 PM Rohan Sachdev <rohansachdev6@gmail.com> wrote:
+//On Mon, May 20, 2019 at 8:21 PM Rohan Sachdev <rohansachdev6@gmail.com> wrote:
 // Rohan Sachdev
 // Period 4A - Advanced CS
 // Enloe High School - Mr. Potter
@@ -261,6 +264,45 @@ public:
         left = NULL;
     }
 
+    KNode (string word)
+    {
+      int idx=0;
+      int idxmax=word.length();
+      int x = 0;
+      int y = 0;
+      int setneg = 1;
+      if (word[idx] == '(') {
+	idx++;
+	if (word[idx] == '-') {
+	  setneg = -1;
+	  idx++;
+	}
+	while (word[idx] != ',') {
+	  x= x * 10;
+	  x += (word[idx] - '0');
+	  idx++;
+	}
+	x = x * setneg;
+	setneg = 1;
+	idx++;
+	if (word[idx] == '-') {
+	  setneg = -1;
+	  idx++;
+	}
+	
+	while (word[idx] != ')') {
+	  y = y * 10;
+	  y += (word[idx] - '0');
+	  idx++;
+	}
+	y = y * setneg;
+	xcoor = x;
+	ycoor = y;
+	right = NULL;
+	left = NULL;
+      }
+    }
+  
     char getcoordInCharge()
     {
         return (coordInCharge);
@@ -467,20 +509,20 @@ void KNode::menu ()
     if (choice == 1)
     {
         // Insert a new coordinate
-        cout<<"Please input an X coordinate: "<<endl;
-        cin>>xcoor;
-        cout<<"Please input a Y coordinate: "<<endl;
-        cin>>ycoor;
+        cout<<"Please input a coordinate: (x,y)"<<endl;
+        cin>>word;
+        //cout<<"Please input a Y coordinate: "<<endl;
+        //cin>>ycoor;
         if (root == NULL)
         {
             cout<<"Please input the coordinate to set priority to for the root node - either 'X' or 'Y'"<<endl;
             cin>>coord;
-            root = new KNode(xcoor, ycoor);
+            root = new KNode(word);
             root->setcoordInCharge(coord);
         }
         else
         {
-            root->addNode(new KNode(xcoor, ycoor));
+            root->addNode(new KNode(word));
         }
     /*
     if (word == "quit")
@@ -513,18 +555,20 @@ void KNode::menu ()
     else if (choice == 2)
     {
         int option;
-        cout<<"Select print option: "<<endl;
-        cout<<"1) Print the coordinates based on the normal binary tree algorithm: "<<endl;
-        cout<<"2) Print the coordinates based on the normal Binary Tree that only have x-coordinate priority"<<endl;
-        cout<<"3) TBD"<<endl;
-        cin>>option;
+        //cout<<"Select print option: "<<endl;
+        //cout<<"1) Print the coordinates based on the normal binary tree algorithm: "<<endl;
+        //cout<<"2) Print the coordinates based on the normal Binary Tree that only have x-coordinate priority"<<endl;
+        //cout<<"3) TBD"<<endl;
+        //cin>>option;
     // Print the Tree
     if (root != NULL)
     {
-    cout<<endl;
-    root->print(root, option);
-    // potter();
-    cout<<endl;
+      for (option = 1 ; option <= 3; option++) {
+	cout<<endl;
+	root->print(root, option);
+	// potter();
+	cout<<endl;
+      }
     }
 
     /*
