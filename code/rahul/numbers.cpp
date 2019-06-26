@@ -7,29 +7,36 @@
 using namespace std;
 
 class Number{
-    public:
-Number(){};
-~Number(){};
-void setNumber1(long int n){
-Number1 = n;
-};
-void setNumber2(long int n){
-Number2 = n;
-};
-void setNumber3(long int n){
-Number3 = n;
-};
-long int addNumbers() {
-return Number1 + Number2;
+public:
+  Number(){};
+  ~Number(){};
+  Number(const Number &n) {
+    cout << " copy constructor called " << endl;
+    Number1 = n.Number1;
+    Number2 = n.Number2;
+    Number3 = n.Number3;
+  }
+  
+  void setNumber1(long int n){
+    Number1 = n;
+  };
+  void setNumber2(long int n){
+    Number2 = n;
+  };
+  void setNumber3(long int n){
+    Number3 = n;
+  };
+  long int addNumbers() {
+    return Number1 + Number2;
 }
 
-void showNumber() {
-cout<<"Number 1 is : "<<Number1<<" Number 2 is : "<<Number2<<endl;
-}
-
-long int Number1;
-long int Number2;
-long int Number3;
+  void showNumber() {
+    cout<<"Number 1 is : "<<Number1<<" Number 2 is : "<<Number2<<endl;
+  }
+  
+  long int Number1;
+  long int Number2;
+  long int Number3;
 };
 
 class NumberList{
@@ -68,7 +75,7 @@ int numCount;
 
 };
 
-int main_loop(NumberList nl) {
+int main_loop(NumberList &nl) {
 
     Number n;
 
