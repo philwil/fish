@@ -1,0 +1,19 @@
+
+wget -q http://cnn.com -O - |\
+tr "\t\r\n'" '   "' |\
+grep -i -o '<a[^>]\+href[ ]*=[ \t]*"\(ht\|f\)tps\?:[^"]\+"' |\
+sed -e 's/^.*"\([^"]\+\)".*$/\1/g'
+
+https://sourceforge.net/projects/videlibri/files/Xidel/Xidel%200.9.8/xidel-0.9.8.src.tar.gz/download
+
+or xidel
+
+xidel http://server -e '//a/@href' |
+
+grep -v "http" |
+
+sort -u |
+
+xargs -L1 -I {}  xidel http://server/{} -e '//a/@href' |
+
+grep -v "http" | sort -u
