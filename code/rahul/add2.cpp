@@ -4,6 +4,7 @@
 #include <vector>
 #include <string>
 #include <fstream>
+#include <stdlib.h>
 
 using namespace std;
 
@@ -63,6 +64,16 @@ class Number{
     };
     void setNumber3(long int n){
     Number3 = n;
+    };
+
+    void setNumber1(string n){
+      Number1 = atoi(n.c_str());
+    };
+    void setNumber2(string n){
+      Number2 = atoi(n.c_str());
+    };
+    void setNumber3(string n){
+      Number3 = atoi(n.c_str());
     };
 
     long int addNumbers() {
@@ -141,39 +152,45 @@ class NumberList{
 
     }
 
-    int readFile(string fName) {
+  int readFile(string fName) {
 
         fName += ".csv";
         fstream input(fName.c_str());
-        string cell[3];
-    int idx = 0;
+	cout << " running readFile [" << fName<<"]"<< endl ;
+        string cell[24];
+        string line;
+	int idx = 0;
 
-        while (getline (input, cell[idx], ',')) {
+        while (getline (input, line)) {
+	  cout <<" line is [" << line<<"]" << endl;
+	  idx = 0;
+	  size_t pos = 0;
+	  pos = line.find(',');
+	  while (pos != string::npos){
+	    cell[idx] = line.substr(0,pos);
+	    line.erase(0,pos+1);
+	    cout << "idx :" << idx
+		 << " cell :" << cell[idx]
+		 << " line :[" << line << "]"<<endl;
+	    pos = line.find(',');
 
-            if(cell[idx].find("\n") == string :: npos) {
-                cout<<"Cell = ["<<cell[idx]<<"]"<<endl; idx+=1;
-            }else {
-                cout<<"Found cr in ["<<cell[idx]<<"]"<<endl;
-                size_t pos = cell[idx].find("\n");
-
-                string ctemp = cell[idx];
-                string cell[idx] = ctemp.substr(0,pos);
-
-                cout<<"Found number "<<" cell[0] : "<<cell[0]<<" cell[1] : "<<cell[1]<<" cell[2] : "<<cell[2]<<endl;
-                idx = 0;
-                cell[idx] = ctemp.substr(pos+1); idx+=1;
-
-                /*
-                std::string str2 = str.substr (3,5);     // "think"
-
-                std::size_t pos = str.find("live");      // position of "live" in str
-
-                std::string str3 = str.substr (pos);     // get from "live" to the end
-
-                std::cout << str2 << ' ' << str3 << '\n';
-                */
-            }
-
+	    idx+=1;
+	  }
+	  //idx +=1;
+	  cell[idx] = line;
+         
+	  cout<<"Found number "
+	      << " cell[0] : " <<cell[0]
+	      << " cell[1] : " <<cell[1]
+	      << " cell[2] : " <<cell[2]
+	      << " cell[3] : " <<cell[3]
+	    //<< " cell[4] : " <<cell[4]
+	      <<endl;
+	  Number*n = new Number();
+	  n->setNumber1(cell[1]);
+	  n->setNumber2(cell[2]);
+	  n->setNumber3(cell[3]);
+	  insertNumber (n);
         }
 
     return 0;
