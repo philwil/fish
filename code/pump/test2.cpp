@@ -18,6 +18,77 @@ using namespace std;
 
 double sinTable[100];
 
+class Pump {
+public:
+  Pump(){
+    wHeight = 0.0;
+    pumpon = 0;
+    pumpcur = 0.0;
+    
+  }
+
+  ~Pump(){
+  }
+  
+  int showPump(void) {
+    string pstate;
+    if(pumpon) {
+      pstate = " Running";
+    } else {
+      pstate = "Stopped";
+    }
+    cout << " Pump :" << pstate
+      << " water level :"
+      ;
+    cout << wHeight;
+    cout<< " Current : " << pumpcur
+	<< endl;
+    return 0;
+  }
+  
+  int addWater ( double level) {
+    wHeight += level;
+  }
+  
+  int checkWater () {
+    if(wHeight> 0.2) return 1 ;
+    return 0;
+  }
+  double checkCurrent () {
+    return pumpcur ;
+  }
+  
+  int setPump (int on) {
+    pumpon = on;
+    return 0;
+  }
+  
+  int runPump(double seconds) {
+    while (seconds > 0.0) {
+      seconds -= 0.1;
+      if (pumpon) {
+	wHeight -= 0.1;
+      }
+      if (wHeight < 0.0 ) {
+	wHeight = 0.0;
+      }
+    
+      if (wHeight > 0.1 ) {
+	pumpcur = 2.0;
+      } else {
+	pumpcur = 0.0;
+      }
+    }
+  }
+    
+  double wHeight;
+  int pumpon;
+  double pumpcur;
+  
+};
+
+Pump * pump;
+
 int fillTable( int num)
 {
   for (int i = 0 ; i < num; i++) {
@@ -80,10 +151,13 @@ int showList(void)
   return 0;
 }
 
+
 int main_help (void) {
   cout<<"(s)how  -- show current objects "<<endl;
   cout<<"(w)rite -- write current objects to file"<<endl;
+  cout<<"(a)dd   -- add water to pump"<<endl;
   cout<<"(r)ead  -- read  objects from file"<<endl;
+  cout<<"(t)urn  -- turn on / off pump"<<endl;
   cout<<"(d)ebug -- turn on / off debug"<<endl;
   cout<<"(q)uit  -- quit"<<endl;
   return 0;
@@ -106,7 +180,33 @@ int main_loop(void *nl) {
 	}else if ((action == "show") 
 	    || (action == "s")) {
 	  //nl.
-	  showList();
+	  pump->showPump();
+	}else if ((action == "add")
+		  || (action == "a")) {
+	  cout<<"enter water level"<<endl;
+	  double ps;
+	  cin>>ps;
+	  pump->addWater(ps);
+	}
+	else if ((action == "prun") 
+		  || (action == "p")) {
+	  cout<<"enter seconds"<<endl;
+	  
+	  double ps;
+	  cin >> ps;
+	  pump->runPump(ps);
+
+	}else if ((action == "turn") 
+	    || (action == "t")) {
+	  cout<<"Enter on/off"<<endl;
+	  string ps;
+	  cin>>ps;
+	  if( ps == "on" ) {
+	    pump->setPump(1);
+	  } else {
+	    pump->setPump(0);
+	  }
+
         }else if ((action == "write")
 		  || (action == "w")) {
 
@@ -136,7 +236,8 @@ int main_loop(void *nl) {
 
 //int ma
 int main() {
-
+  pump = new Pump();
+  
   //int rc;
   //string val;
   //NumberList nl;
