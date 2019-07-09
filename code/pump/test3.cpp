@@ -19,6 +19,8 @@
 //gm_get_timestamp(&now);
 using namespace std;
 
+int g_debug = 0;
+
 #define PI 3.141
 
 double sinTable[100];
@@ -64,6 +66,7 @@ void get_timestamp( struct timespec *tts , int delms )
   ts_add_ms(tts, delms);
   
 }
+
 //is now > ts 
 int check_timestamp(struct timespec *tts)
 {
@@ -80,6 +83,13 @@ public:
     wHeight = 0.0;
     pumpon = 0;
     pumpcur = 0.0;
+    raining = 0;
+    on_ticks = 0;
+    off_ticks = 0;
+    ticks = 0;
+    pumpOnTime = 5000;
+    pumpOffTime = 5000;
+    wPRate = 0.003;
     
   }
 
@@ -93,12 +103,14 @@ public:
     } else {
       pstate = "Stopped";
     }
-    cout << " Pump :" << pstate
+    cout << " Pump :" << ticks<<": state "<< pstate
       << " water level :"
       ;
     cout << wHeight;
-    cout<< " Current : " << pumpcur
-	<< endl;
+    cout << " Current : " << pumpcur;
+    cout << " on_ticks left  " << (on_ticks - ticks);
+    cout << " off_ticks left  " << (off_ticks - ticks);
+    cout << endl;
     return 0;
   }
   
@@ -110,63 +122,90 @@ public:
     if(wHeight> 0.2) return 1 ;
     return 0;
   }
+  
   double checkCurrent () {
     return pumpcur ;
   }
-  // attempt to set the pump on or off
-  int setPump (int on) {
-    // if off_time not passed refuse to turn on
-    if (( on ==  1) && (check_timestamp(&off_time)) && ( pumpon == 0)) {
-	if (check_timestamp(&off_time)) {
-	  pumpon = on;
-	  // max on time
-	  get_timestamp(&on_time, 5000);
-	} else {
-	  cout << " Pump off not timed out, waiting" << endl;
-	}
-	if((on == 0) && (pumpon == 1)){
-	  // min off time
-	  get_timestamp(&off_time, 5000);
-	}
-      }
-      //pumpon = on;
-    return 0;
+  
+  void startRain( double rate) {
+    raining = 1;
+    wRate = rate;
   }
+  
+  void stopRain() {
+    raining = 0;
+  }
+  
+  
   int getPump () {
     return pumpon;
   }
   
-  int runPump(double seconds) {
-    // if running too long turn off
-    if(pumpon && check_timestamp(&on_time)) {
-      cout << " Pump on time out, turn it off" << endl;
-      setPump(0);
+  void pumpOn() {
+    if(pumpon == 0) {
+      on_ticks = ticks + pumpOnTime;
+      if(g_debug) {
+	cout<<" Turned on pump at "<<ticks<<" level "<< wHeight<< endl;
+      }
+      pumpon = 1;
+      pumpcur = 2.0;
     }
-    while (seconds > 0.0) {
-      seconds -= 0.1;
-      if (pumpon) {
-	wHeight -= 0.1;
+  }
+  
+  void pumpOff() {
+    if(pumpon == 1) {
+      off_ticks = ticks + pumpOffTime;
+      if(g_debug) {
+	cout<<" Turned off pump at "<<ticks<<" level "<< wHeight<< endl;
       }
-      if (wHeight < 0.0 ) {
-	wHeight = 0.0;
+      pumpon = 0;
+    }
+  }
+  
+  void runTick(){
+    ticks++;
+    if(raining) {
+      wHeight += wRate;
+    }
+    if (pumpon) {
+      wHeight -= wPRate;
+      if(wHeight < 0.2) pumpcur = 0.0;
+      // check on_time
+      if (ticks > on_ticks) {
+	if (wHeight > 0.5 ) {
+	  pumpOnTime += 1000;
+	}
+	pumpOff();
       }
-    
-      if (wHeight > 0.1 ) {
-	pumpcur = 2.0;
-      } else {
-	pumpcur = 0.0;
+      if  (pumpcur < 0.1) {
+	pumpOff();
+      }
+    } else {
+      if (ticks > off_ticks) {
+	if (wHeight > 0.5 ) {
+	  pumpOn();
+	}
       }
     }
   }
-    
+  
+  int raining;
+  double wRate;
+  double wPRate;
   double wHeight;
   int pumpon;
   double pumpcur;
-  struct timespec on_time;
-  struct timespec off_time;
+  long int on_ticks;
+  long int off_ticks;
+  long int ticks;
+  long int pumpOnTime;
+  long int pumpOffTime;
+  
 };
 
 Pump *pump;
+#if 1
+
 
 int fillTable( int num)
 {
@@ -230,83 +269,45 @@ int showList(void)
   return 0;
 }
 
-int stopRain = 1;
-pthread_t rainTh;
 
-void *rainThread( void *data)
+int stopTick = 1;
+pthread_t tickTh;
+
+void *tickThread( void *data)
 {
   Pump * p = (Pump *) data;
-  cout << " rain thread running" << endl;
-  while (! stopRain) {
-    poll(NULL, 0, 100);
-    p->addWater(0.1);
+  cout << " tick thread running" << endl;
+  while (! stopTick) {
+    poll(NULL, 0, 1);
+    p->runTick();
   }
-  cout << " rain thread stopping" << endl;
-
+  cout << " tick thread stopping" << endl;
+  
   pthread_exit(NULL);
 }
 
-int runRainThread(void)
+int runTickThread(void)
 {
-  if (stopRain == 1) {
-    stopRain = 0;
-    pthread_create(&rainTh, NULL, rainThread, (void *)pump);
+  if (stopTick == 1) {
+    stopTick = 0;
+    pthread_create(&tickTh, NULL, tickThread, (void *)pump);
     
   } else {
-    stopRain = 1;
-    pthread_join(rainTh, NULL);
+    stopTick = 1;
+    pthread_join(tickTh, NULL);
   }
 }
 
-int stopPump = 1;
-pthread_t pumpTh;
 
-void *pumpThread( void *data)
-{
-  Pump * p = (Pump *) data;
-  cout << "pump thread running" << endl;
-  while (! stopPump) {
-    poll(NULL, 0, 50);
-    if (p->getPump() == 0) {
-      
-      if (p->checkWater()) {
-	p->setPump(1);
-      }
-    } else {
-      if(p->checkCurrent() < 1) {
-	p->setPump(0);
-	
-	//p->setOffTime()
-      }
-      p->runPump(0.050);
-    }
-  }
-  cout << " pump thread stopping" << endl;
-
-  pthread_exit(NULL);
-}
-
-int runPumpThread(void)
-{
-  if (stopPump == 1) {
-    stopPump = 0;
-    pthread_create(&pumpTh, NULL, pumpThread, (void *)pump);
-    
-  } else {
-    stopPump = 1;
-    pthread_join(pumpTh, NULL);
-  }
-}
 
 int main_help (void) {
   cout<<"(s)how  -- show current objects "<<endl;
   cout<<"(w)rite -- write current objects to file"<<endl;
   cout<<"(a)dd   -- add water to pump"<<endl;
   cout<<"(r)ead  -- read  objects from file"<<endl;
-  cout<<"(t)urn  -- turn on / off pump"<<endl;
   cout<<"(d)ebug -- turn on / off debug"<<endl;
-  cout<<"(1)rain -- turn on/off rain thread"<<endl;
-  cout<<"(2)pump -- turn on/off pump thread"<<endl;
+  cout<<"(3)rstart -- start rain"<<endl;
+  cout<<"(4)rstop  -- stop rain"<<endl;
   cout<<"(q)uit  -- quit"<<endl;
   return 0;
 }
@@ -325,43 +326,36 @@ int main_loop(void *nl) {
 	    || (action == "h")) {
 	  //nl.
 	  main_help();
+	}else if ((action == "debug") 
+	    || (action == "d")) {
+	  if(g_debug) {
+	    cout << "Turned off debug" << endl;
+	    g_debug = 0;
+	  } else {
+	    cout << "Turned on debug" << endl;
+	    g_debug = 1;
+	  }
+	  //pump->showPump();
 	}else if ((action == "show") 
-	    || (action == "s")) {
+		  || (action == "s")) {
 	  //nl.
 	  pump->showPump();
-	}else if ((action == "rain") 
-	    || (action == "1")) {
-	  //nl.
-	  runRainThread();
-	}else if ((action == "pump") 
-	    || (action == "2")) {
-	  //nl.
-	  runPumpThread();
+	}else if ((action == "rstart") 
+		  || (action == "3")) {
+	  cout << " enter rate " << endl;
+	  double rate;
+	  cin >> rate;
+	  pump->startRain(rate);
+	}else if ((action == "rstop") 
+		  || (action == "4")) {
+	  pump->stopRain();
+	  
 	}else if ((action == "add")
 		  || (action == "a")) {
 	  cout<<"enter water level"<<endl;
 	  double ps;
 	  cin>>ps;
 	  pump->addWater(ps);
-	}
-	else if ((action == "prun") 
-		  || (action == "p")) {
-	  cout<<"enter seconds"<<endl;
-	  
-	  double ps;
-	  cin >> ps;
-	  pump->runPump(ps);
-
-	}else if ((action == "turn") 
-	    || (action == "t")) {
-	  cout<<"Enter on/off"<<endl;
-	  string ps;
-	  cin>>ps;
-	  if( ps == "on" ) {
-	    pump->setPump(1);
-	  } else {
-	    pump->setPump(0);
-	  }
 
         }else if ((action == "write")
 		  || (action == "w")) {
@@ -389,15 +383,17 @@ int main_loop(void *nl) {
     return 0;
 }
 
-
+#endif
 //int ma
 int main() {
   pump = new Pump();
-  
+  runTickThread();
+
   //int rc;
   //string val;
   //NumberList nl;
-    main_loop(NULL);
+  main_loop(NULL);
+  runTickThread();
 
 return 0;
 
