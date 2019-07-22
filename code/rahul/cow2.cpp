@@ -608,27 +608,35 @@ int eval_cowpad ()
   cout <<"dist West : " <<  w
        << endl;
   
-
+  // disable things already evaluated
+  if(cp->N) n = 100;
+  if(cp->E) e = 100;
+  if(cp->W) w = 100;
+  if(cp->S) s = 100;
   best = "None";
   // simple test
   if ((cp->W == NULL) && (w<n) && (w < s) && (w < e) ) {
     best = "West";
+    cout << "adding cowpad " << best<<endl;
     cp->W = new cowLink(cp, 1, 0);
     cp->W->addCowPad(cp);
   }
   if ((cp->E == NULL) && (e<n) && (e < s) && (e < w) ) {
     best = "East";
+    cout << "adding cowpad " << best<<endl;
     cp->E = new cowLink(cp, -1, 0);
     cp->E->addCowPad(cp);
   }
   if ((cp->S == NULL) && (s<n) && (s < e) && (s < w) ) {
     best = "South";
+    cout << "adding cowpad " << best<<endl;
     cp->S = new cowLink(cp, 0, 1);
     cp->S->addCowPad(cp);
 
   }
   if ((cp->N == NULL) && (n<s) && (n < e) && (n < w) ) {
     best = "North";
+    cout << "adding cowpad " << best<<endl;
     cp->N = new cowLink(cp, 0, -1);
     cp->N->addCowPad(cp);
 
@@ -679,13 +687,20 @@ int show_cowpads()
   }
 
 
-  cp = g_cp;
-  while (cp) {
-    cout<<"cp id:  "<< cp->id;
-    cout<<"  x: "<< cp->x;
-    cout<<" y: "<< cp->y << endl;
+  for (int i = 0 ; i < MAX_LEVELS; i++) {
+    cp = g_levels[i];
+    
+    if (cp ) {
+      cout << "level :" << i << endl; 
+    }
 
-    cp = cp->next;
+    while (cp) {
+      cout<<"cp id:  "<< cp->id;
+      cout<<"  x: "<< cp->x;
+      cout<<" y: "<< cp->y << endl;
+      
+      cp = cp->next;
+    }
   }
 
 }
