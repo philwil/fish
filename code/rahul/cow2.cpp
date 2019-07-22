@@ -486,12 +486,14 @@ int show_help() {
   cout<<"(a) add -> add a cow pad"<<endl;
   cout<<"(e) eval -> eval links to dest"<<endl;
   cout<<"(s) show -> show cowpads"<<endl;
+  cout<<"(p) picker -> run picker"<<endl;
   cout<<"(q) quit -> quit"<<endl;
 
 }
 
 #define MAX_LEVELS 32
 cowPad * g_cp = NULL;
+cowPad * g_pick = NULL;
 cowPad * g_lake = NULL;
 cowPad * g_barn = NULL;
 cowPad * g_rock = NULL;
@@ -586,11 +588,21 @@ int set_level()
 
 }
 
+cowPad *picker();
+
 // eval g_cp from this point to barn
 int eval_cowpad ()
 {
   cowPad *cp;
-  cp = g_cp;
+  cp = g_pick;
+  if(!cp) {
+    picker();
+    cp=g_pick;
+  }
+  if(!cp) {
+    cout << " picker found nothing" << endl;
+    return 0;
+  }
   double doubleDist( int x1, int x2, int y1, int y2);
   double e,w,n,s;
   string best = "";
@@ -615,26 +627,26 @@ int eval_cowpad ()
   if(cp->S) s = 100;
   best = "None";
   // simple test
-  if ((cp->W == NULL) && (w<n) && (w < s) && (w < e) ) {
+  if ((cp->W == NULL) && (w<=n) && (w <= s) && (w <= e) ) {
     best = "West";
     cout << "adding cowpad " << best<<endl;
-    cp->W = new cowLink(cp, 1, 0);
+    cp->W = new cowLink(cp, -1, 0);
     cp->W->addCowPad(cp);
   }
-  if ((cp->E == NULL) && (e<n) && (e < s) && (e < w) ) {
+  else if ((cp->E == NULL) && (e<=n) && (e <= s) && (e <= w) ) {
     best = "East";
     cout << "adding cowpad " << best<<endl;
-    cp->E = new cowLink(cp, -1, 0);
+    cp->E = new cowLink(cp, 1, 0);
     cp->E->addCowPad(cp);
   }
-  if ((cp->S == NULL) && (s<n) && (s < e) && (s < w) ) {
+  else if ((cp->S == NULL) && (s<=n) && (s <=e) && (s <= w) ) {
     best = "South";
     cout << "adding cowpad " << best<<endl;
     cp->S = new cowLink(cp, 0, 1);
     cp->S->addCowPad(cp);
 
   }
-  if ((cp->N == NULL) && (n<s) && (n < e) && (n < w) ) {
+  else if ((cp->N == NULL) && (n<=s) && (n <= e) && (n <= w) ) {
     best = "North";
     cout << "adding cowpad " << best<<endl;
     cp->N = new cowLink(cp, 0, -1);
@@ -647,6 +659,27 @@ int eval_cowpad ()
 
   
 }
+
+cowPad *picker()
+{
+  cowPad *cp = NULL;
+  //get the highest level with nodes left to allocate
+  for (int i = 1 ; i <= MAX_LEVELS; i++) {
+    cp = g_levels[MAX_LEVELS-i];
+    if (cp) {
+      while(cp) {
+	if((!cp->N) ||(!cp->S)||(!cp->E)||(!cp->W)) {
+	  cout << " found level : " << cp->level<<" node id: "<< cp->id << endl;  
+	  return cp;
+	}
+
+	cp = cp->next;
+      }
+    }
+  }
+  return cp;
+}
+
 
 int set_test()
 {
@@ -661,6 +694,13 @@ int set_test()
   g_levels[0] = g_lake;
   g_lake->level = 0;
   
+}
+
+int run_picker()
+{
+  cowPad *cp = picker();
+  g_pick = cp;
+  return 0;
 }
 
 int show_cowpads()
@@ -757,6 +797,11 @@ int main_loop(NumberList &nl) {
 	   (action == "s")){
 
 	  show_cowpads();
+	}
+	else if((action == "pick") ||
+	   (action == "p")){
+
+	  run_picker();
 	}
     }
     return 1;
