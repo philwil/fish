@@ -27,7 +27,8 @@ using namespace std;
 
 int g_debug = 0;
 
-int g_id = 1;
+int g_clid = 1;
+int g_cpid = 1;
 
 class NumberList;
 
@@ -120,7 +121,7 @@ public:
     value = 99;
     incX= x;
     incY= y;
-    id = g_id++;
+    id = g_clid++;
     
   };
   
@@ -156,7 +157,7 @@ public:
         //Eval = 99;
         //Wval = 99;
         level = 0;
-	id = ++g_id;
+	id = ++g_cpid;
     };
 
     ~cowPad() {
