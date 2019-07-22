@@ -302,10 +302,11 @@ public:
   double dist;
   cowPad * prev;
   cowPad * next;
-  
+  cowPad * addCowPad( cowPad * c);
   
   
 };
+
 
 class cowPad {
 public:
@@ -363,8 +364,6 @@ public:
 
 
 };
-
-
 
 double cowLink::evalTarg(int tx, int ty)
 {
@@ -499,6 +498,20 @@ cowPad * g_rock = NULL;
 cowPad * g_levels[MAX_LEVELS];
 cowPad * g_level = NULL;
 
+
+cowPad*cowLink::addCowPad(cowPad * cp)
+{
+  cowPad *lp;
+  next = new cowPad(prev->x + incX, prev->y + incY);
+  next->level = prev->level+1;
+  lp = g_levels[next->level];
+  next->next = lp;
+  g_levels[next->level]=next;
+          
+}
+
+
+
 cowPad *add_cowpad()
 {
   cowPad * cp;
@@ -598,11 +611,32 @@ int eval_cowpad ()
 
   best = "None";
   // simple test
-  if ((cp->W == NULL) && (w<n) && (w < s) && (w < e) ) best = "West";
-  if ((cp->E == NULL) && (e<n) && (e < s) && (e < w) ) best = "East";
-  if ((cp->S == NULL) && (s<n) && (s < e) && (s < w) ) best = "South";
-  if ((cp->N == NULL) && (n<s) && (n < e) && (n < w) ) best = "North";
+  if ((cp->W == NULL) && (w<n) && (w < s) && (w < e) ) {
+    best = "West";
+    cp->W = new cowLink(cp, 1, 0);
+    cp->W->addCowPad(cp);
+  }
+  if ((cp->E == NULL) && (e<n) && (e < s) && (e < w) ) {
+    best = "East";
+    cp->E = new cowLink(cp, -1, 0);
+    cp->E->addCowPad(cp);
+  }
+  if ((cp->S == NULL) && (s<n) && (s < e) && (s < w) ) {
+    best = "South";
+    cp->S = new cowLink(cp, 0, 1);
+    cp->S->addCowPad(cp);
+
+  }
+  if ((cp->N == NULL) && (n<s) && (n < e) && (n < w) ) {
+    best = "North";
+    cp->N = new cowLink(cp, 0, -1);
+    cp->N->addCowPad(cp);
+
+
+  }
   cout <<"Best is : " << best << endl;
+  cout <<"level : " << cp->level << endl;
+
   
 }
 
