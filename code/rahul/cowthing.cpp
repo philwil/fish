@@ -48,7 +48,7 @@ class Number{
     Number(){
 
         next = NULL;
-id = ++g_id;
+	id = ++g_id;
 
         if (g_debug) {
              cout<<"Constructor called"<<endl;
@@ -288,12 +288,13 @@ public:
     value = 99;
     incX= x;
     incY= y;
+    id = g_id++;
     
   };
   
   ~cowLink() {};
   double evalTarg(int tx, int ty);
-
+  int id;
   int incX;
   int incY;
   int level;
@@ -312,10 +313,10 @@ public:
   cowPad( int xx = 0, int yy = 0) {
         //constructor called
         next = NULL;
-        N = new cowLink(this, 0, -1);
-        S = new cowLink(this, 0, 1);
-        E = new cowLink(this, -1, 0);
-        W = new cowLink(this, 1, 0);
+        N = NULL;//new cowLink(this, 0, -1);
+        S = NULL;//new cowLink(this, 0, 1);
+        E = NULL;//new cowLink(this, -1, 0);
+        W = NULL;//new cowLink(this, 1, 0);
         x = xx;
         y = yy;
         //Nval = 99;
@@ -323,21 +324,23 @@ public:
         //Eval = 99;
         //Wval = 99;
         level = 0;
+	id = ++g_id;
     };
 
     ~cowPad() {
         //destructor called
     };
 
-    cowLink * N; //North
-    cowLink * S; //South
-    cowLink * E; //East
-    cowLink * W; //West
-
-    int x;
-    int y;
-    int level;
-
+  cowLink * N; //North
+  cowLink * S; //South
+  cowLink * E; //East
+  cowLink * W; //West
+  
+  int x;
+  int y;
+  int level;
+  int id;
+  
     cowPad *next;
 
     void setxy (int xn, int yn) {
@@ -408,6 +411,8 @@ void cowPad::evalW (int xgoal, int ygoal){
   }
 }
 
+
+
 double doubleDist( int x1, int x2, int y1, int y2)
 {
   double d;
@@ -476,17 +481,25 @@ int cmain_loop(NumberList &nl) {
 
 int show_help() {
   cout<<"(h) help -> show this help"<<endl;
+  cout<<"(l) lake -> add lake"<<endl;
+  cout<<"(b) barn -> add barn"<<endl;
+  cout<<"(r) rock -> add rock"<<endl;
   cout<<"(a) add -> add a cow pad"<<endl;
   cout<<"(e) eval -> eval links to dest"<<endl;
   cout<<"(s) show -> show cowpads"<<endl;
-  cout<<"(t) target -> set target dest"<<endl;
   cout<<"(q) quit -> quit"<<endl;
 
 }
 
+#define MAX_LEVELS 32
 cowPad * g_cp = NULL;
+cowPad * g_lake = NULL;
+cowPad * g_barn = NULL;
+cowPad * g_rock = NULL;
+cowPad * g_levels[MAX_LEVELS];
+cowPad * g_level = NULL;
 
-int add_cowpad()
+cowPad *add_cowpad()
 {
   cowPad * cp;
   cout<<"enter x location "<<endl;
@@ -502,16 +515,141 @@ int add_cowpad()
     cp->next=g_cp;
   }
   g_cp = cp;
+  return cp;
+}
 
+cowPad * add_lake()
+{
+  cowPad * cp;
+  cout<<"enter x location "<<endl;
+  int x;
+  cin>>x;
+  cout<<"enter y location "<<endl;
+  int y;
+  cin>>y;
+  cp = new cowPad(x,y);
+  g_lake = cp;
+  g_cp = g_lake;
+  g_levels[0] = g_lake;
+  g_lake->level = 0;
+  return cp;
+}
+
+cowPad * add_barn()
+{
+  cowPad * cp;
+  cout<<"enter x location "<<endl;
+  int x;
+  cin>>x;
+  cout<<"enter y location "<<endl;
+  int y;
+  cin>>y;
+  cp = new cowPad(x,y);
+  g_barn = cp;
+  return cp;
+}
+
+cowPad * add_rock()
+{
+  cowPad * cp;
+  cout<<"enter x location "<<endl;
+  int x;
+  cin>>x;
+  cout<<"enter y location "<<endl;
+  int y;
+  cin>>y;
+  cp = new cowPad(x,y);
+  g_rock = cp;
+  return cp;
+}
+
+int set_level()
+{
+  cout<<"enter move level max(32) "<<endl;
+  int x;
+  cin>>x;
+  if (x < MAX_LEVELS) g_level = g_levels[x];
+  return x;
+
+}
+
+// eval g_cp from this point to barn
+int eval_cowpad ()
+{
+  cowPad *cp;
+  cp = g_cp;
+  double doubleDist( int x1, int x2, int y1, int y2);
+  double e,w,n,s;
+  string best = "";
+  n = doubleDist(cp->x, g_barn->x, cp->y-1, g_barn->y);
+  s = doubleDist(cp->x, g_barn->x, cp->y+1, g_barn->y);
+  e = doubleDist(cp->x+1, g_barn->x, cp->y, g_barn->y);
+  w = doubleDist(cp->x-1, g_barn->x, cp->y, g_barn->y);
+  
+  cout <<"dist North : " <<  n 
+       << endl;
+  cout <<"dist South : " <<  s 
+       << endl;
+  cout <<"dist East : " <<  e
+       << endl;
+  cout <<"dist West : " <<  w
+       << endl;
+  
+
+  best = "None";
+  // simple test
+  if ((cp->W == NULL) && (w<n) && (w < s) && (w < e) ) best = "West";
+  if ((cp->E == NULL) && (e<n) && (e < s) && (e < w) ) best = "East";
+  if ((cp->S == NULL) && (s<n) && (s < e) && (s < w) ) best = "South";
+  if ((cp->N == NULL) && (n<s) && (n < e) && (n < w) ) best = "North";
+  cout <<"Best is : " << best << endl;
+  
+}
+
+int set_test()
+{
+  cowPad *cp = new cowPad(3,6);
+  g_rock = cp;
+  cp = new cowPad(3,3);
+  g_barn = cp;
+
+  cp = new cowPad(6,8);
+  g_lake = cp;
+  g_cp = g_lake;
+  g_levels[0] = g_lake;
+  g_lake->level = 0;
+  
 }
 
 int show_cowpads()
 {
-  
+
   cowPad * cp = g_cp;
+  if (g_lake) {
+    cp = g_lake;
+    cout<<"Lake  id:  "<< cp->id;
+    cout<<"  x: "<< cp->x;
+    cout<<" y: "<< cp->y << endl;
+  }
+  if (g_barn) {
+    cp = g_barn;
+    cout<<"Barn  id:  "<< cp->id;
+    cout<<"  x: "<< cp->x;
+    cout<<" y: "<< cp->y << endl;
+  }
+  if (g_rock) {
+    cp = g_rock;
+    cout<<"Rock  id:  "<< cp->id;
+    cout<<"  x: "<< cp->x;
+    cout<<" y: "<< cp->y << endl;
+  }
+
+
+  cp = g_cp;
   while (cp) {
-    cout<<"cp x  "<< cp->x;
-    cout<<" cp y  "<< cp->y << endl;
+    cout<<"cp id:  "<< cp->id;
+    cout<<"  x: "<< cp->x;
+    cout<<" y: "<< cp->y << endl;
 
     cp = cp->next;
   }
@@ -542,6 +680,30 @@ int main_loop(NumberList &nl) {
 
 	  add_cowpad();
 	}
+	else if((action == "eval") ||
+	   (action == "e")){
+
+	  eval_cowpad();
+	}
+	else if((action == "lake") ||
+	   (action == "l")){
+
+	  add_lake();
+	}
+	else if((action == "barn") ||
+	   (action == "b")){
+
+	  add_barn();
+	}
+	else if((action == "level") ||
+	   (action == "l")){
+	  set_level();
+	}
+	else if((action == "rock") ||
+	   (action == "r")){
+
+	  add_rock();
+	}
 	else if((action == "show") ||
 	   (action == "s")){
 
@@ -552,11 +714,23 @@ int main_loop(NumberList &nl) {
     
 }
 
+int set_up_levels()
+{
+  for(int i = 0 ; i < MAX_LEVELS; i++) {
+      g_levels[i] = NULL;
+  }
+  g_level = NULL;
+  set_test();
+}
+
 int main() {
 
     int rc;
+    
     string val;
     NumberList nl;
+    set_up_levels();
+
     main_loop(nl);
 
 return 0;
