@@ -11,6 +11,12 @@
 ..........
 .....L....
 ..........
+
+All we do here is add the cow class 
+  and show how to subclass brown and black cows
+  the use of the virtual member is also shown so we can print all the cows
+  from the base cow class no matter what sub class they belong to.
+ 
  */
 
 #include <iostream>
