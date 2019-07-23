@@ -145,6 +145,7 @@ int g_id = 1;
 class Cow {
 public:
   Cow() {
+    next=NULL;
     name ="daisy";
     color = "blue";
     id = g_id++;
@@ -167,6 +168,7 @@ public:
 	 << " color "<<color
 	 << endl;
   };
+  Cow *next;
   string name;
   string color;
   int id;
@@ -197,6 +199,53 @@ public:
   };
 
 };
+class blackCow: public Cow {
+public:
+  blackCow() {
+    color = "black";
+    cout << " blackCow constructor id: "<< id
+	 <<" name :" << name
+	 << " color "<<color
+	 << endl;
+  }
+  ~blackCow() {
+    cout << " blackCow destructor id:" <<id
+	 <<" name :" << name
+	 << " color "<<color
+      	 << endl;
+    
+  }
+ void showCow()
+  {
+    cout << " blackCow showCow id: "<< id
+	 <<" name :" << name
+	 << " color "<<color
+	 << endl;
+  };
+
+};
+
+Cow * g_cows =  NULL;
+
+void addCow( Cow * cow)
+{
+  //if(g_cows)
+  // g_cows->next = cow;
+  cow->next = g_cows;
+  g_cows = cow; 
+}
+
+void showCows()
+{
+  cout << " Here are all the cows"<<endl;
+  Cow * c = g_cows;
+  while (c) {
+    c->showCow();
+    c = c->next;
+  }
+    
+  
+}
 
 class cowPad {
 public:
@@ -631,18 +680,27 @@ int main() {
     Cow cow;
     Cow *cowp;
     brownCow bcow;
+    blackCow bkcow;
     cowp =&bcow;
-
+    bcow.name = "belle";
+    bkcow.name = "blackie";
+    
     // show the base cow
     cow.showCow();
     // we use the overridden brown cow show even though its
     // a pointer to Cow
     cowp->showCow();
+
+    addCow(&cow);
+    addCow(&bcow);
+    addCow(&bkcow);
+    
     //NumberList nl;
     set_up_levels();
 
     main_loop(/*nl*/);
 
+    showCows();
     return 0;
 
 }
