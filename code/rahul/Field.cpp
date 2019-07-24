@@ -1,40 +1,58 @@
 
+/*
+ * Field.cpp
+ *
+ * demo of reading a file full of lines and chars
+ */
+
 #include <iostream>
 #include <fstream>
+
+
+
 using namespace std;
 class Field;
 class Line;
+int g_cid =1;
+
 class Char {
+
 public:
   Char() {
+    id = g_cid++;
     c  = ' ';
     next = NULL;
     prev = NULL;
   };
   ~Char() {};
   
-  int append(Line *l, Char *cp);
-  
-  Char * next;
-  Char * prev;
+  int id;
+  Char *next;
+  Char *prev;
   char c;
 
 };
 
+int g_lid =1;
 
 class Line {
 public:
   Line() {
+    id = g_lid++;
     line = "";
     chars = NULL;
     next = NULL;
     prev = NULL;
   };
-  ~Line() {};
-  int addChars(string lc);
-  int append(Field *f, Line *lp);
-  Char * getChar(int num);
   
+  ~Line() {
+    freeChars();
+  };
+  int freeChars();
+  int addChars(string lc);
+  int append(Char *lp);
+  Char *getChar(int num);
+  int id;
   Line * next;
   Line * prev;
   Char * chars;
@@ -47,22 +65,40 @@ public:
   Field(){
     lines = NULL;
   };
-  ~Field(){};
-  Line *lines;
-  int showLine(int num);
-  Line * getLine(int num);
-  int addLine(string l) {
-    Line * lp;
-    lp = new Line();
-    lp->line = l;
-    lp->addChars(l);
-
-    lines->append(this, lp);   
-      
+  ~Field(){
+    freeLines();
   };
+  Line *lines;
+  int freeLines();  
+  int showLine(int num);
+  Line *getLine(int num);
+  int append(Line *lp);
+  int addLine(string l);
   
 };
 
+int Field::freeLines() {
+  Line *l;
+  if (lines) {
+    l = lines->prev;
+    l->next = NULL;
+  }
+  while (lines) {
+    cout << " delete line :"<< lines->id << endl;
+    l = lines;
+    lines = l->next;
+    delete l;
+  }
+  return 0;
+}
+
+int Field::addLine(string l) {
+  Line * lp;
+  lp = new Line();
+  lp->line = l;
+  lp->addChars(l);
+  append(lp);   
+};
 
 int Field::showLine(int num) {
   Line * l = getLine(num);
@@ -71,8 +107,7 @@ int Field::showLine(int num) {
   return 0;
 };
 
-
-Line * Field::getLine(int num) {
+Line *Field::getLine(int num) {
   Line * l;
   if (lines == NULL) {
     cout<< "no lines try read " << endl;
@@ -87,7 +122,6 @@ Line * Field::getLine(int num) {
     }
     num--;
   }
-
   return l;
 };
 
@@ -106,19 +140,18 @@ Char * Line::getChar(int num) {
     }
     num--;
   }
-
   return cp;
 };
 
 
-int Char::append(Line *l, Char *cp) {
-  if ( l->chars == NULL) {
+int Line::append(Char *cp) {
+  if ( chars == NULL) {
     cp->next = cp;
     cp->prev = cp;
-    l->chars = cp;
+    chars = cp;
   } else {
-    Char * head = l->chars;
-    Char * tail = l->chars->prev;
+    Char * head = chars;
+    Char * tail = chars->prev;
     cp->next = head;
     cp->prev = tail;
     tail->next = cp;
@@ -127,25 +160,39 @@ int Char::append(Line *l, Char *cp) {
   return 0;  
 };
 
+int Line::freeChars() {
+  Char *c;
+  if (chars) {
+    c = chars->prev;
+    c->next = NULL;
+  }
+  while (chars) {
+    c = chars;
+    chars = c->next;
+    delete c;
+  }
+  return 0;
+}
+
 int Line::addChars(string lc) {
   for (int i = 0 ; i < lc.length(); i++) {
     Char *cp = new Char();
     cp->c = lc[i];
-    chars->append(this, cp);     
+    append(cp);     
     
   }
   return 0;  
     
 };
 
-int Line::append(Field *f, Line *lp) {
-  if ( f->lines == NULL) {
+int Field::append(Line *lp) {
+  if (lines == NULL) {
     lp->next = lp;
     lp->prev = lp;
-    f->lines = lp;
+    lines = lp;
   } else {
-    Line * head = f->lines;
-    Line * tail = f->lines->prev;
+    Line * head = lines;
+    Line * tail = lines->prev;
     lp->next = head;
     lp->prev = tail;
     tail->next = lp;
