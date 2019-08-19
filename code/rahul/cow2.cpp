@@ -41,7 +41,7 @@ int writeToFile (string fileName, NumberList&nl) {
 
 
 
-
+#if 0
 class Number{
     public:
 
@@ -178,94 +178,95 @@ class NumberList{
 
 
     }
-
+  
   // this is where we do all the work
   int readFile(string fName) {
-
-        fName += ".txt";
-        fstream input(fName.c_str());
-cout << " running readFile [" << fName<<"]"<< endl ;
-        //string cell[24];
-        string line;
-int row = 0;
-int idx = 0;
-
-        while (getline (input, line)) {
- row++;
- cout <<" line is [" << line<<"]" << endl;
-
- idx = 0;
- size_t pos = 0;
-
- pos = line.find('B');
- if (pos != string::npos){
-   Number*n = new Number();
-   n->setName("Barn");
-   n->setX(pos+1);
-   n->setY(row);
-   insertNumber (n);
-   Barn = n;
- }
- pos = line.find('R');
- if (pos != string::npos){
-   Number*n = new Number();
-   n->setName("Rock");
-   n->setX(pos+1);
-   n->setY(row);
-   insertNumber (n);
-   Rock = n;
-
- }
-
- pos = line.find('L');
- if (pos != string::npos){
-   Number*n = new Number();
-   n->setName("Lake");
-   n->setX(pos+1);
-   n->setY(row);
-   insertNumber (n);
-   Lake = n;
- }
-
-        }
-
-    return 0;
-
-}
-
-
-    void showNumberList (string fName) {
-
-        int i = 0;
-        fName+= ".csv";
-          ofstream myfile;
-            myfile.open (fName.c_str());
-            //myfile << "Writing this to a file.\n";
-
-
-        Number*nn = n;
-
-        while (nn) {
-
-            if (nn == n) {
-                nn -> showHeader(myfile);
-            }
-
-            myfile<<i++<< " , ";
-            nn -> showNumber(myfile);
-            nn = nn -> next;
-        }
-
-            myfile.close();
-
+    
+    fName += ".txt";
+    fstream input(fName.c_str());
+    cout << " running readFile [" << fName<<"]"<< endl ;
+    //string cell[24];
+    string line;
+    int row = 0;
+    int idx = 0;
+    
+    while (getline (input, line)) {
+      row++;
+      cout <<" line is [" << line<<"]" << endl;
+      
+      idx = 0;
+      size_t pos = 0;
+      
+      pos = line.find('B');
+      if (pos != string::npos){
+	Number*n = new Number();
+	n->setName("Barn");
+	n->setX(pos+1);
+	n->setY(row);
+	insertNumber (n);
+	Barn = n;
+      }
+      pos = line.find('R');
+      if (pos != string::npos){
+	Number*n = new Number();
+	n->setName("Rock");
+	n->setX(pos+1);
+	n->setY(row);
+	insertNumber (n);
+	Rock = n;
+	
+      }
+      
+      pos = line.find('L');
+      if (pos != string::npos){
+	Number*n = new Number();
+	n->setName("Lake");
+	n->setX(pos+1);
+	n->setY(row);
+	insertNumber (n);
+	Lake = n;
+      }
+      
     }
+    
+    return 0;
+    
+  }
+  
+  
+  void showNumberList (string fName) {
+    
+    int i = 0;
+    fName+= ".csv";
+    ofstream myfile;
+    myfile.open (fName.c_str());
+    //myfile << "Writing this to a file.\n";
+    
+    
+    Number*nn = n;
+    
+    while (nn) {
+      
+      if (nn == n) {
+	nn -> showHeader(myfile);
+      }
+      
+      myfile<<i++<< " , ";
+      nn -> showNumber(myfile);
+      nn = nn -> next;
+    }
+    
+    myfile.close();
 
-    Number *n;
-    int numCount;
-
-
+  }
+  
+  Number *n;
+  int numCount;
+  
+  
 
 };
+#endif
 
 double doubleDist( int x1, int x2, int y1, int y2);
 
@@ -349,20 +350,20 @@ public:
         y = yn;
     }
 
-  void evalN (int xgoal, int ygoal);
-  void evalS (int xgoal, int ygoal);
-  void evalE (int xgoal, int ygoal);
-  void evalW (int xgoal, int ygoal);
+  //void evalN (int xgoal, int ygoal);
+  //void evalS (int xgoal, int ygoal);
+  //void evalE (int xgoal, int ygoal);
+  //void evalW (int xgoal, int ygoal);
 
 
 
-    void showPad () {
-        cout<<"X is : "<<x<<" y is : "<<y<<endl;
-        cout<<"N->val is : "<<N->value<<" S->val is : "<<S->value<<endl;
-        cout<<"E->val is : "<<E->value<<" W->val is : "<<W->value<<endl;
-    }
-
-
+  void showPad () {
+    cout<<"X is : "<<x<<" y is : "<<y<<endl;
+    cout<<"N->val is : "<<N->value<<" S->val is : "<<S->value<<endl;
+    cout<<"E->val is : "<<E->value<<" W->val is : "<<W->value<<endl;
+  }
+  
+  
 };
 
 double cowLink::evalTarg(int tx, int ty)
@@ -374,6 +375,7 @@ double cowLink::evalTarg(int tx, int ty)
   
 };
 
+#if 0
 void cowPad::evalN (int xgoal, int ygoal){
 
   if (ygoal > y) {
@@ -410,6 +412,7 @@ void cowPad::evalW (int xgoal, int ygoal){
   }
 }
 
+#endif
 
 
 double doubleDist( int x1, int x2, int y1, int y2)
@@ -420,6 +423,7 @@ double doubleDist( int x1, int x2, int y1, int y2)
   
 }
 
+#if 0
 Number * findDist(NumberList &nl, Number * B, Number * L, Number * R)
 {
   Number *n = new Number();
@@ -430,7 +434,6 @@ Number * findDist(NumberList &nl, Number * B, Number * L, Number * R)
   return n;
 
 }
-
 
 
 int cmain_loop(NumberList &nl) {
@@ -477,6 +480,7 @@ int cmain_loop(NumberList &nl) {
     return 0;
 }
 
+#endif
 
 int show_help() {
   cout<<"(h) help -> show this help"<<endl;
@@ -745,7 +749,7 @@ int show_cowpads()
 
 }
 
-int main_loop(NumberList &nl) {
+int main_loop(/*NumberList &nl*/) {
 
     string action;
     string fName;
@@ -822,10 +826,10 @@ int main() {
     int rc;
     
     string val;
-    NumberList nl;
+    //NumberList nl;
     set_up_levels();
 
-    main_loop(nl);
+    main_loop(/*nl*/);
 
 return 0;
 
