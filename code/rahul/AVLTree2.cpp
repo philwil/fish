@@ -285,8 +285,27 @@ void preOrder(Node *root)
         preOrder(root->left);  
         preOrder(root->right);  
     }  
-}  
-  
+}
+
+void printOrder( Node *treePtr, int &row) {
+    if(treePtr != NULL){
+      //cout << " row :" << row << " key :" <<treePtr->key << endl;
+        row++;
+        printOrder(treePtr->right,row);
+        int i;
+        for(i=row;i> 0;i--)
+            printf("\t");
+        printf("%d\n", treePtr->key);
+        printOrder(treePtr->left,row);
+        row--;
+    }
+}
+
+void printTree( Node *treePtr) {
+    int row = 0;
+    printOrder(treePtr,row);
+} 
+
 // Driver Code 
 int main()  
 {  
@@ -318,7 +337,10 @@ Node *root = NULL;
             "constructed AVL tree is \n";  
     preOrder(root);
     cout <<endl;
-    
+
+
+    printTree(root);
+
   
     root = deleteNode(root, 10);  
   
@@ -331,7 +353,49 @@ Node *root = NULL;
         / \  
        2   6  
     */
-  
+    /*
+
+
+You could first traverse your tree (as you do already) and add every entry to a std::vector instead of printing it directly, resulting in a sequence of elements like
+
+{80,70,50,40,30}
+and then your reverse the content of the vector resulting in
+
+{30,40,50,70,80}
+Now print that content in that form you desire, by just looping over the vector.
+
+To get the correct intendation, you can store std::pair elements in the vector, containing the intendation level as the second element e.g.
+
+{{80,0},{70,1},{50,2},{40,1},{30,0}}
+For printing intendation you substract the number from the maximum level of intendation.
+
+Or, alternatively, traverse your tree in the left-middle-right order by exchanging the lines
+
+printOrder(treePtr->rightPtr,row);
+and
+
+printOrder(treePtr->leftPtr,row);
+and print it as desired.
+
+
+ void printOrder( TreeNode *treePtr, int *row) {
+    if(treePtr != NULL){
+        (*row)++;
+        printOrder(treePtr->rightPtr,row);
+        int i;
+        for(i=0;i<(*row);i--)
+            printf("\t");
+        printf("%d\n", treePtr->data);
+        printOrder(treePtr->leftPtr,row);
+        (*row)--;
+    }
+}
+
+void printTree( TreeNode *treePtr) {
+    int row = 0;
+    printOrder(treePtr,&row);
+} 
+    */
     cout << "\nPreorder traversal after"
          << " deletion of 10 \n";  
     preOrder(root);  
